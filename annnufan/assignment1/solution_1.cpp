@@ -6,16 +6,13 @@
 #include <cctype>
 #include <functional>
 
-void word_anagram(bool case_sens) {
-	std::string word_1, word_2;
-	std::cin >> word_1 >> word_2;
+bool word_anagram(std::string word_1, std::string word_2, bool case_sens) {
 	if (!case_sens) {
 		std::transform(word_1.begin(), word_1.end(), word_1.begin(), std::ptr_fun <int, int> (std::tolower));
 		std::transform(word_2.begin(), word_2.end(), word_2.begin(), std::ptr_fun <int, int> (std::tolower));
 	}
 	if (word_1.length() != word_2.length()) {
-		std::cout << "Second word isn't anagram of first\n";
-		return;
+		return false;
 	}
 
 	std::vector<int> count(256, 0);
@@ -26,22 +23,28 @@ void word_anagram(bool case_sens) {
 		if (count[ch] > 0) {
 			count[ch]--;
 		} else {
-			std::cout << "Second word isn't anagram of first\n";
-			return;
+			return false;
 		}
 	}
+	return true;
+}
 
-	std::cout << "Yes, second word is anagram of first\n";
-	return;
+void solve_for_word(bool case_sens) {
+	std::string word_1, word_2;
+	std::cin >> word_1 >> word_2;
+	if (word_anagram(word_1, word_2, case_sens)) {
+		std::cout << "anagram\n";
+	} else {
+		std::cout << "not anagram\n";
+	}
 }
 
 std::vector<std::string> line_to_words(std::string line) {
 	std::string word = "";
 	std::vector<std::string> words;
-	for (int i = 0; i < line.length(); i++) {
+	for (int i = 0; i < (int)line.length(); i++) {
 		if (line[i] == ' ' ) {
 			if (word != "") {
-				std::sort(word.begin(), word.end());
 				words.push_back(word);
 				word = "";
 			}
@@ -50,43 +53,54 @@ std::vector<std::string> line_to_words(std::string line) {
 		}
 	}
 	if (word != "") {
-		std::sort(word.begin(), word.end());
 		words.push_back(word);
 	}
 	return words;
 }
 
-void sentence_anagram(bool case_sens) {
-	std::string line_1, line_2;
-	std::getline(std::cin, line_1);
-	std::getline(std::cin, line_1);
-	std::getline(std::cin, line_2);
+std::vector<std::string> sorted_words(std::vector<std::string> words) {
+	std::vector<std::string> sorted_words;
+	for (auto word: words) {
+		std::sort(word.begin(), word.end());
+		sorted_words.push_back(word);
+	}
+	return sorted_words;
+}
+
+bool sentence_anagram(std::string line_1, std::string line_2, bool case_sens) {
 	if (!case_sens) {
 		std::transform(line_1.begin(), line_1.end(), line_1.begin(), std::ptr_fun <int, int>(std::tolower));
 		std::transform(line_2.begin(), line_2.end(), line_2.begin(), std::ptr_fun <int, int>(std::tolower));
 	}
 	if (line_1.length() != line_2.length()) {
-		std::cout << "Second sentence isn't anagram of first\n";
-		return;
+		return false;
 	}
 	std::vector<std::string> words_1, words_2;
-	words_1 = line_to_words(line_1);
-	words_2 = line_to_words(line_2);
+	words_1 = sorted_words(line_to_words(line_1));
+	words_2 = sorted_words(line_to_words(line_2));
 	if (words_1.size() != words_2.size()) {
-		std::cout << "Second sentence isn't anagram of first\n";
-		return;
+		return false;
 	}
 	std::sort(words_1.begin(), words_1.end());
 	std::sort(words_2.begin(), words_2.end());
-	for (int i = 0; i < words_1.size(); i++) {
+	for (int i = 0; i < (int)words_1.size(); i++) {
 		if (words_1[i] != words_2[i]) {
-			std::cout << "Second sentence isn't anagram of first\n";
-			return;
+			return false;
 		}
 	}
-	
-	std::cout << "Yes, second word is anagram of first\n";
-	return;
+	return true;
+}
+
+void solve_for_sentence(bool case_sens) {
+	std::string line_1, line_2;
+	std::getline(std::cin, line_1);
+	std::getline(std::cin, line_1);
+	std::getline(std::cin, line_2);
+	if (sentence_anagram(line_1, line_2, case_sens)) {
+		std::cout << "anagram\n";
+	} else {
+		std::cout << "not anagram\n";
+	}
 }
 
 int main() {
@@ -96,9 +110,9 @@ int main() {
 	std::cout << "Do you want case sensitive or case insensitive anagrams?\n1 -- case sensitive\n2 -- case insensitive\n";
 	std::cin >> case_sens;
 	if (type_of_ask == 1) {
-		word_anagram((case_sens == 1)?true:false);
+		solve_for_word(case_sens == 1);
 	} else {
-		sentence_anagram((case_sens == 1)?true:false);
+		solve_for_sentence(case_sens == 1);
 	}
 	return 0;	
 }
