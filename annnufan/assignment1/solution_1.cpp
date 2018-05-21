@@ -8,8 +8,8 @@
 
 bool word_anagram(std::string word_1, std::string word_2, bool case_sens) {
 	if (!case_sens) {
-		std::transform(word_1.begin(), word_1.end(), word_1.begin(), std::ptr_fun <int, int> (std::tolower));
-		std::transform(word_2.begin(), word_2.end(), word_2.begin(), std::ptr_fun <int, int> (std::tolower));
+		std::transform(word_1.begin(), word_1.end(), word_1.begin(), ::tolower);
+		std::transform(word_2.begin(), word_2.end(), word_2.begin(), ::tolower);
 	}
 	if (word_1.length() != word_2.length()) {
 		return false;
