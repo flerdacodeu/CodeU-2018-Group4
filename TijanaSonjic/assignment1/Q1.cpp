@@ -7,21 +7,26 @@
 
 using namespace std;
 
-bool isWord(string word) {
-	for each (char letter in word){
-		if (!((letter >= 'a' && letter <= 'z') || (letter >= 'A' && letter <= 'Z')))
-			return false;
-	}
 
-	return true;
-}
-
-void makeSmallLetter(char* letter) {
+void makeLowerLetter(char* letter) {
 	*letter = *letter + 'a' - 'A';
 }
 
 bool isUpperCase(char letter) {
 	return letter >= 'A' && letter <= 'Z';
+}
+
+bool isLowerCase(char letter) {
+	return letter >= 'a' && letter <= 'z';
+}
+
+bool isWord(string word) {
+	for (char letter : word) {
+		if (!(isLowerCase(letter) || isUpperCase(letter)))
+			return false;
+	}
+
+	return true;
 }
 
 // Function that checks whether two words are anagram of each other.
@@ -40,7 +45,7 @@ bool isAnagram(string word1, string word2, bool caseSensitive) {
 		char letter = word1[i];
 
 		if (!caseSensitive && isUpperCase(letter))
-			makeSmallLetter(&letter);
+			makeLowerLetter(&letter);
 
 		lettersDifCount[letter]++;
 	}
@@ -49,7 +54,7 @@ bool isAnagram(string word1, string word2, bool caseSensitive) {
 		char letter = word2[i];
 		
 		if (!caseSensitive && isUpperCase(letter))
-			makeSmallLetter(&letter);
+			makeLowerLetter(&letter);
 
 		lettersDifCount[letter]--;
 
@@ -82,14 +87,6 @@ string generateKey(string word, bool caseSensitive) {
 	return word;
 }
 
-void updateCounters(unordered_map<string, int>* wordsDifCount, string word, bool caseSensitive, int inc, bool* continueAlgorithm) {
-	string key = generateKey(word, caseSensitive);
-	(*wordsDifCount)[key] += inc;
-
-	if ((*wordsDifCount)[key] < 0)
-		*continueAlgorithm = false;
-}
-
 // This function checks whether two sentences are anagram of each other.
 // With third argument you can choose if you want to handle case sensitive or case insensitive anagrams.
 //
@@ -108,13 +105,15 @@ bool areTwoSentencesAnagrams(string sentence1, string sentence2, bool caseSensit
 	unordered_map<string, int> wordsDifCount;
 
 	for (int i = 0; i < words1.size(); i++) {
-		updateCounters(&wordsDifCount, words1[i], caseSensitive, 1, &continueAlgorithm);
+		string key = generateKey(words1[i], caseSensitive);
+		wordsDifCount[key]++;
 	}
 
 	for (int i = 0; i < words2.size(); i++) {
-		updateCounters(&wordsDifCount, words2[i], caseSensitive, -1, &continueAlgorithm);
+		string key = generateKey(words2[i], caseSensitive);
+		wordsDifCount[key]--;
 
-		if (!continueAlgorithm)
+		if (wordsDifCount[key] < 0)
 			return false;
 	}
 
@@ -130,17 +129,16 @@ int main() {
 	string sentence1 = "Today is a great day";
 	string sentence2 = "Is a treag toayd ayd";
 
-	if (isAnagram(word1, word2, 1))
+	if (isAnagram(word1, word2, false))
 		cout << "Words " << word1 << " and " << word2 << " are anagrams." << endl;
 	else
 		cout << "Words " << word1 << " and " << word2 << " are not anagrams." << endl;
 
-	if (areTwoSentencesAnagrams(sentence1, sentence2, 0))
+	if (areTwoSentencesAnagrams(sentence1, sentence2, true))
 		cout << "Sentences are anagrams." << endl;
 	else
 		cout << "Sentences are not anagrams." << endl;
 	
-
 	system("PAUSE");
 	return 0;
 }
