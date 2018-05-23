@@ -2,10 +2,6 @@
 #include <iostream>
 
 template <typename T>
-class node;
-
-
-template <typename T>
 class node {
 	T value;
 	node<T>* next;
@@ -33,13 +29,13 @@ template <typename T>
 node<T>* find_kth_to_last(node<T>* head, int k) {
 	node<T>* tail = head;
 	node<T>* kth = head;
-	int between = 0;
-	while (between < k) {
+	int count = 0;
+	while (count < k) {
 		if (tail->get_next() == nullptr) {
 			return nullptr;
 		}
 		tail = tail->get_next();
-		between++;
+		count++;
 	}
 	while (tail->get_next() != nullptr) {
 		tail = tail->get_next();
