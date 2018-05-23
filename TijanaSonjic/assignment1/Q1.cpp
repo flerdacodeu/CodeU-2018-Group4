@@ -22,11 +22,16 @@ bool isLowerCase(char letter) {
 
 bool isWord(string word) {
 	for (char letter : word) {
-		if (!(isLowerCase(letter) || isUpperCase(letter)))
+		if (!isLowerCase(letter) && !isUpperCase(letter))
 			return false;
 	}
 
 	return true;
+}
+
+void makeLowerLetterIfNeeded(char* letter, bool caseSensitive) {
+	if (!caseSensitive && isUpperCase(*letter))
+		makeLowerLetter(letter);
 }
 
 // Function that checks whether two words are anagram of each other.
@@ -44,17 +49,15 @@ bool isAnagram(string word1, string word2, bool caseSensitive) {
 	for (int i = 0; i < word1.length(); i++) {
 		char letter = word1[i];
 
-		if (!caseSensitive && isUpperCase(letter))
-			makeLowerLetter(&letter);
-
+		makeLowerLetterIfNeeded(&letter, caseSensitive);
+		
 		lettersDifCount[letter]++;
 	}
 
 	for (int i = 0; i < word2.length(); i++) {
 		char letter = word2[i];
 		
-		if (!caseSensitive && isUpperCase(letter))
-			makeLowerLetter(&letter);
+		makeLowerLetterIfNeeded(&letter, caseSensitive);
 
 		lettersDifCount[letter]--;
 
