@@ -16,12 +16,14 @@ bool word_anagram(std::string word_1, std::string word_2, bool case_sens) {
 	}
 
 	std::vector<int> count(256, 0);
+	
+	//String used signed char. So, it needs to add 127 for each char for counting sort 
 	for (auto ch : word_1) {
-		count[ch]++;
+		count[ch + 127]++;
 	}
 	for (auto ch : word_2) {
-		if (count[ch] > 0) {
-			count[ch]--;
+		if (count[ch + 127] > 0) {
+			count[ch + 127]--;
 		} else {
 			return false;
 		}
@@ -83,12 +85,8 @@ bool sentence_anagram(std::string line_1, std::string line_2, bool case_sens) {
 	}
 	std::sort(words_1.begin(), words_1.end());
 	std::sort(words_2.begin(), words_2.end());
-	for (int i = 0; i < (int)words_1.size(); i++) {
-		if (words_1[i] != words_2[i]) {
-			return false;
-		}
-	}
-	return true;
+	
+	return words_1 == words_2;
 }
 
 void solve_for_sentence(bool case_sens) {
