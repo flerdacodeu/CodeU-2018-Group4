@@ -9,6 +9,7 @@ struct Node{
   T val;
 };
 
+template <typename T>
 int get_list_size(Node<T>* head){
   Node<T>* curr_node = head;
   int size = 0;
