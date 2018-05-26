@@ -69,7 +69,8 @@ int main(){
 	cout << "Input integer k value between 0 and 20" << endl;
 	cin >> k;
 
-	List<int>* headd = NULL;
+	List<int>* head_empty = NULL; // empty list for check
+	
 	List<int>* kth_element = findKthElement(head, k);
 	if (kth_element != NULL) cout << kth_element->key << endl;
 
