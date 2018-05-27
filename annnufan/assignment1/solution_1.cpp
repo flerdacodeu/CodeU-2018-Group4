@@ -18,12 +18,12 @@ bool word_anagram(std::string word_1, std::string word_2, bool case_sens) {
 	std::vector<int> count(256, 0);
 	
 	//String used signed char. So, it needs to add 127 for each char for counting sort 
-	for (char ch : word_1) {
-		count[(unsigned char)ch]++;
+	for (unsigned char ch : word_1) {
+		count[ch]++;
 	}
-	for (char ch : word_2) {
-		if (count[(unsigned char)ch] > 0) {
-			count[(unsigned char)ch]--;
+	for (unsigned char ch : word_2) {
+		if (count[ch] > 0) {
+			count[ch]--;
 		} else {
 			return false;
 		}
