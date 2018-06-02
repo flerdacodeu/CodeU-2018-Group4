@@ -1,3 +1,6 @@
+// I implemented this class but did not use it in mt assignment solution.
+// I thought the node class wa enough
+
 #include <list>
 
 template <typename Key>
