@@ -100,10 +100,8 @@ private:
         }
     }
 
-    bool isAncestor(const Node<T> *node, const T &key1, const T &key2) {
-        bool found1 = keyIsInSubtree(node->left, key1) || keyIsInSubtree(node->right, key1);
-        bool found2 = keyIsInSubtree(node->left, key2) || keyIsInSubtree(node->right, key2);
-        return  found1 && found2;
+    bool isAncestor(const Node<T> *node, const T &key) {
+        return  keyIsInSubtree(node->left, key) || keyIsInSubtree(node->right, key);
     }
 
     bool keyIsInSubtree(const Node<T> *node, T key) {
@@ -124,7 +122,7 @@ private:
         bool foundInLeft = printLowestCommonAncestor(node->left, key1, key2);
         bool foundInRight = printLowestCommonAncestor(node->right, key1, key2);
         if (!foundInLeft && !foundInRight) {
-            if (isAncestor(node, key1, key2)) {
+            if (isAncestor(node, key1) && isAncestor(node, key2)) {
                 cout << node->key;
                 return true;
             }

@@ -17,32 +17,32 @@ int main() {
 
 
     tree.printTree();
-    cout << "\n\n";
+    cout << endl << endl;
 
     cout << "6's ancestors: ";
     tree.printAncestors(6);
-    cout << "\n";
+    cout << endl;
     cout << "1's ancestors: ";
     tree.printAncestors(1);
-    cout << "\n";
+    cout << endl;
     cout << "2's ancestors: ";
     tree.printAncestors(2);
-    cout << "\n";
+    cout << endl;
     cout << "3's ancestors: ";
     tree.printAncestors(3);
-    cout << "\n";
+    cout << endl;
     cout << "4's ancestors: ";
     tree.printAncestors(4);
-    cout << "\n";
+    cout << endl;
     cout << "5's ancestors: ";
     tree.printAncestors(5);
-    cout << "\n";
+    cout << endl;
     cout << "7's ancestors: ";
     tree.printAncestors(7);
-    cout << "\n";
+    cout << endl;
     cout << "8's ancestors: ";
     tree.printAncestors(8);
-    cout << "\n";
+    cout << endl << endl;
 
     int keys[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     for (int i = 0; i < 8; i++) {
