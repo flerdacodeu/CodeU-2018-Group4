@@ -4,7 +4,9 @@
 #include <iostream>
 using namespace std;
 
-// Assuming T is comparable and printable
+enum Side {LEFT, RIGHT};
+
+// Assuming T is comparable, copyable and printable
 // Assuming keys are unique
 
 template <typename T>
@@ -12,6 +14,9 @@ struct Node {
     T key;
     Node<T> *left = nullptr;
     Node<T> *right = nullptr;
+    Node(T key) {
+        this->key = key;
+    }
 };
 
 template <typename T>
@@ -19,51 +24,43 @@ class BinaryTree {
 private:
     Node<T> *root;
 
-    void copyTree(Node<T> *parent, Node<T> *newNode, string side) {
-        if (newNode == nullptr) {
-            return;
+    Node<T> *copyTree(const Node<T> *toCopy) {
+        if (toCopy == nullptr) {
+            return nullptr;
         }
 
-        Node<T> *child = new Node<T>;
-        child->key = newNode->key;
-        if (side == "left") {
-            parent->left = child;
-        }
-        else {
-            parent->right = child;
-        }
-        copyTree(child, newNode->left, "left");
-        copyTree(child, newNode->right, "right");
+        Node<T> *newNode = new Node<T>(toCopy->key);
+
+        newNode->left = copyTree(toCopy->left);
+        newNode->right = copyTree(toCopy->right);
+
+        return newNode;
     }
 
-    void insert(Node<T> *node, T key, T parentKey, bool &success) {
+    // insert a new node, return true on success, false on failure
+    bool insert(Node<T> *node, const T &key, const  T &parentKey, const Side side) {
         if (node == nullptr) {
-            return;
+            return false;
         }
         if (node->key == parentKey) {
-            if (node->left == nullptr) {
-                Node<T> *child = new Node<T>;
-                child->key = key;
+            if (side == LEFT && node->left == nullptr) {
+                Node<T> *child = new Node<T>(key);
                 node->left = child;
-                success = true;
-                return;
+                return true;
             }
-            else if (node->right == nullptr) {
-                Node<T> *child = new Node<T>;
-                child->key = key;
+            else if (side == RIGHT && node->right == nullptr) {
+                Node<T> *child = new Node<T>(key);
                 node->right = child;
-                success = true;
-                return;
+                return true;
             }
-            else { // parent already has 2 children
-                return;
+            else { // place is already taken
+                return false;
             }
         }
-        insert(node->left, key, parentKey, success);
-        if (success) {
-            return;
+        if (insert(node->left, key, parentKey, side)) {
+            return true;
         }
-        insert(node->right, key, parentKey, success);
+        return insert(node->right, key, parentKey, side);
     }
 
     void destroyTree(Node<T> *node) {
@@ -75,7 +72,8 @@ private:
         delete node;
     }
 
-    void printTree(Node<T> *node) {
+    // prints tree in post-order
+    void printTree(const Node<T> *node) {
         if (node == nullptr) {
             return;
         }
@@ -84,23 +82,17 @@ private:
         cout << node->key << " ";
     }
 
-    void printAncestors(Node<T> *node, T key, bool &found) {
+    bool printAncestors(const Node<T> *node, const T &key) {
         if (node == nullptr) {
-            return;
+            return false;
         }
         if (node->key == key) {
-            found = true;
-            return;
+            return true;
         }
-        if (!found) {
-            printAncestors(node->left, key, found);
-        }
-        if (!found) {
-            printAncestors(node->right, key, found);
-        }
-        if (found) {
+
+        if (printAncestors(node->left, key) || printAncestors(node->right, key)) {
             if (node == this->root) {
-                cout << node->key << endl;
+                cout << node->key;
             }
             else {
                 cout << node->key << ", ";
@@ -108,41 +100,39 @@ private:
         }
     }
 
-    bool bothKeysAreInSubtree(Node<T> *node, T key1, T key2) {
-        bool found1 = false, found2 = false;
-        bothKeysAreInSubtreeAux(node->left, key1, key2, found1, found2);
-        bothKeysAreInSubtreeAux(node->right, key1, key2, found1, found2);
-        return found1 && found2;
+    bool isAncestor(const Node<T> *node, const T &key1, const T &key2) {
+        bool found1 = keyIsInSubtree(node->left, key1) || keyIsInSubtree(node->right, key1);
+        bool found2 = keyIsInSubtree(node->left, key2) || keyIsInSubtree(node->right, key2);
+        return  found1 && found2;
     }
 
-    void bothKeysAreInSubtreeAux(Node<T> *node, T key1, T key2, bool &found1, bool &found2) {
+    bool keyIsInSubtree(const Node<T> *node, T key) {
         if (node == nullptr) {
-            return;
+            return false;
         }
-        if (node->key == key1) {
-            found1 = true;
+        if (node->key == key) {
+            return true;
         }
-        if (node->key == key2) {
-            found2 = true;
-        }
-        bothKeysAreInSubtreeAux(node->left, key1, key2, found1, found2);
-        bothKeysAreInSubtreeAux(node->right, key1, key2, found1, found2);
+        return keyIsInSubtree(node->left, key) || keyIsInSubtree(node->right, key);
     }
 
-    void printLowestCommonAncestor(Node<T> *node, T key1, T key2, bool &found) {
+    // The return value denotes weather the LCA was already found or not
+    bool printLowestCommonAncestor(const Node<T> *node, const T &key1, const T &key2) {
         if (node == nullptr) {
-            return;
+            return false;
         }
-        if (!found) {
-            printLowestCommonAncestor(node->left, key1, key2, found);
+        bool foundInLeft = printLowestCommonAncestor(node->left, key1, key2);
+        bool foundInRight = printLowestCommonAncestor(node->right, key1, key2);
+        if (!foundInLeft && !foundInRight) {
+            if (isAncestor(node, key1, key2)) {
+                cout << node->key;
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        if (!found) {
-            printLowestCommonAncestor(node->right, key1, key2, found);
-        }
-        if (!found && bothKeysAreInSubtree(node, key1, key2)) {
-            found = true;
-            cout << node->key << endl;
-        }
+        return (foundInLeft || foundInRight);
     }
 
 
@@ -150,45 +140,41 @@ public:
     BinaryTree() {
         this->root = nullptr;
     }
-    BinaryTree(Node<T> *root) {
+    BinaryTree(const BinaryTree &tree) {
         if (root == nullptr) {
             this->root = nullptr;
             return;
         }
-        this->root = new Node<T>;
-        this->root->key = root->key;
-        copyTree(this->root, root->left, "left");
-        copyTree(this->root, root->right, "right");
+
+        this->root = copyTree(tree.root);
     }
     ~BinaryTree() {
         destroyTree(this->root);
     }
 
-    bool insertKey(T key, T parentKey) {
+    bool insertRoot(const T &key) {
         if (this->root == nullptr) {
-            this->root = new Node<T>;
-            this->root->key = key;
+            this->root = new Node<T>(key);
             return true;
         }
-        bool success = false;
-        insert(this->root, key, parentKey, success);
-        return success;
+        return false;
+    }
+
+    bool insertKey(const T &key, const T &parentKey, const Side side) {
+        return insert(this->root, key, parentKey, side);
     }
 
     void printTree() {
         printTree(this->root);
     }
 
-    void printAncestors(T key) {
-        bool found = false;
-        printAncestors(this->root, key, found);
+    void printAncestors(const T &key) {
+        printAncestors(this->root, key);
     }
 
-    void printLowestCommonAncestor(T key1, T key2) {
-        bool found = false;
-        printLowestCommonAncestor(this->root, key1, key2, found);
+    void printLowestCommonAncestor(const T &key1, const T &key2) {
+        printLowestCommonAncestor(this->root, key1, key2);
     }
 };
-
 
 #endif //BINARYTREE_HPP
