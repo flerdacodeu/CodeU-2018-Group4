@@ -14,8 +14,19 @@ public:
 		this->rightChild = rightChild;
 	}
 	
+	void distroy() {
+		if (leftChild) {
+			leftChild->distroy();
+			leftChild = nullptr;
+		}
+		if (rightChild) {
+			rightChild->distroy();
+			rightChild = nullptr;
+		}		
+	}
+
 	~Node() {
-		// TODO
+		distroy();
 	}
 	
 	Node* insertLeftChild(Node* node) {
