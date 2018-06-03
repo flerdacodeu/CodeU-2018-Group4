@@ -2,13 +2,13 @@
 
 
 //
-//				   7
-//				 /   \
-//				3	  4
-//			  /	  \	   \
-//			 2	   5	8
-//			/ \
-//		   1   6
+//			   7
+//			 /   \
+//			3      4
+//		      /	  \     \
+//		     2	   5	 8
+//		   /   \
+//		  1     6
 //
 int main() {
 	Node* node1 = new Node(1);
@@ -55,6 +55,9 @@ int main() {
 		cout << "Key is not in the tree." << endl;
 	}
 	cout << endl;
+	
+	
+	root->distroy();
 
 	system("PAUSE");
 	return 0;
