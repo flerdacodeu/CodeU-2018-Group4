@@ -57,8 +57,6 @@ int main() {
 	cout << endl;
 	
 	
-	root->distroy();
-
 	system("PAUSE");
 	return 0;
 }
