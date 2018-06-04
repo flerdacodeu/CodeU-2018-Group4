@@ -2,6 +2,8 @@
 #define BINARYTREE_HPP
 
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
 enum Side {LEFT, RIGHT};
@@ -82,21 +84,15 @@ private:
         cout << node->key << " ";
     }
 
-    bool printAncestors(const Node<T> *node, const T &key) {
+    bool findAncestors(const Node<T> *node, const T &key, vector<T> &ancestors) {
         if (node == nullptr) {
             return false;
         }
         if (node->key == key) {
             return true;
         }
-
-        if (printAncestors(node->left, key) || printAncestors(node->right, key)) {
-            if (node == this->root) {
-                cout << node->key;
-            }
-            else {
-                cout << node->key << ", ";
-            }
+        if (findAncestors(node->left, key, ancestors) || findAncestors(node->right, key, ancestors)) {
+            ancestors.push_back(node->key);
         }
     }
 
@@ -115,22 +111,22 @@ private:
     }
 
     // The return value denotes weather the LCA was already found or not
-    bool printLowestCommonAncestor(const Node<T> *node, const T &key1, const T &key2) {
+    bool findLowestCommonAncestor(const Node<T> *node, const T &key1, const T &key2, T &lca) {
         if (node == nullptr) {
             return false;
         }
-        bool foundInLeft = printLowestCommonAncestor(node->left, key1, key2);
-        bool foundInRight = printLowestCommonAncestor(node->right, key1, key2);
-        if (!foundInLeft && !foundInRight) {
-            if (isAncestor(node, key1) && isAncestor(node, key2)) {
-                cout << node->key;
-                return true;
-            }
-            else {
-                return false;
-            }
+        bool foundInLeft = findLowestCommonAncestor(node->left, key1, key2, lca);
+        bool foundInRight = findLowestCommonAncestor(node->right, key1, key2, lca);
+        if (foundInLeft || foundInRight) { // node is a common ancestor, but not the lowest one
+            return true;
         }
-        return (foundInLeft || foundInRight);
+        if (isAncestor(node, key1) && isAncestor(node, key2)) { // node is the lowest common ancestor
+            lca = node->key;
+            return true;
+        }
+        else { // node is not a common ancestor
+            return false;
+        }
     }
 
 
@@ -139,11 +135,6 @@ public:
         this->root = nullptr;
     }
     BinaryTree(const BinaryTree &tree) {
-        if (root == nullptr) {
-            this->root = nullptr;
-            return;
-        }
-
         this->root = copyTree(tree.root);
     }
     ~BinaryTree() {
@@ -166,12 +157,16 @@ public:
         printTree(this->root);
     }
 
-    void printAncestors(const T &key) {
-        printAncestors(this->root, key);
+    vector<T> findAncestors(const T &key) {
+        vector<T> ancestors;
+        findAncestors(this->root, key, ancestors);
+        return ancestors;
     }
 
-    void printLowestCommonAncestor(const T &key1, const T &key2) {
-        printLowestCommonAncestor(this->root, key1, key2);
+    T findLowestCommonAncestor(const T &key1, const T &key2, const T defaultValue) {
+        T lca = defaultValue; // if no lca is found (one of keys is root) return defaultValue
+        findLowestCommonAncestor(this->root, key1, key2, lca);
+        return lca;
     }
 };
 
