@@ -19,36 +19,62 @@ int main() {
     tree.printTree();
     cout << endl << endl;
 
+    vector<int> ancestors;
+    
     cout << "6's ancestors: ";
-    tree.printAncestors(6);
+    ancestors = tree.findAncestors(6);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl;
     cout << "1's ancestors: ";
-    tree.printAncestors(1);
+    ancestors = tree.findAncestors(1);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl;
     cout << "2's ancestors: ";
-    tree.printAncestors(2);
+    ancestors = tree.findAncestors(2);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl;
     cout << "3's ancestors: ";
-    tree.printAncestors(3);
+    ancestors = tree.findAncestors(3);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl;
     cout << "4's ancestors: ";
-    tree.printAncestors(4);
+    ancestors = tree.findAncestors(4);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl;
     cout << "5's ancestors: ";
-    tree.printAncestors(5);
+    ancestors = tree.findAncestors(5);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl;
     cout << "7's ancestors: ";
-    tree.printAncestors(7);
+    ancestors = tree.findAncestors(7);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl;
     cout << "8's ancestors: ";
-    tree.printAncestors(8);
+    ancestors = tree.findAncestors(8);
+    for (auto a : ancestors) {
+        cout << a << ", ";
+    }
     cout << endl << endl;
 
     int keys[8] = {1, 2, 3, 4, 5, 6, 7, 8};
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             cout << keys[i] << ", " << keys[j] << " lowest common ancestor: ";
-            tree.printLowestCommonAncestor(keys[i], keys[j]);
+            cout << tree.findLowestCommonAncestor(keys[i], keys[j], 0);
             cout << endl;
         }
     }
