@@ -1,3 +1,8 @@
+#include "tree_node.cpp"
+#include <list>
+
+using namespace std;
+
 template <typename Key>
 bool is_direct_ancestor(Key key, Node<Key>* curr_node){
   bool left_son_has_key = 
