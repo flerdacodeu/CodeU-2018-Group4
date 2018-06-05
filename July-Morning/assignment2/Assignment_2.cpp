@@ -18,18 +18,8 @@ template <typename T> struct node
 // Here we assume that all keys in the tree are unique
 template <typename T> class binary_tree 
 {
-    public:
+    private:
     
-        node<T> * root;
-    
-        binary_tree() : root(NULL) {}
-        
-        ~binary_tree()
-        {
-            if (root != NULL)
-                destroy(root);
-        }
-        
         void destroy (node<T> * s_root) 
         {
             if (s_root->left != NULL)
@@ -39,7 +29,7 @@ template <typename T> class binary_tree
             delete s_root;   
         }
         
-        bool is_child (T& key, node<T> * parent) 
+        bool is_descendant (T& key, node<T> * parent) 
         {
             if (parent == NULL)
                 return false;
@@ -49,9 +39,21 @@ template <typename T> class binary_tree
             if (parent->right != NULL)    
                 if (parent->right->key == key)
                     return true;        
-            return (is_child(key, parent->left) || is_child(key, parent->right));
+            return is_descendant (key, parent->left) || is_descendant (key, parent->right);
         }
         
+    public:
+    
+        node<T> * root;
+        
+        binary_tree() : root (NULL) {}
+        
+        ~binary_tree()
+        {
+            if (root != NULL)
+                destroy (root);
+        }
+    
         // Find ancestors of the node with a given key
         // Return value:
         // true - if ancestors were found successfully
@@ -62,10 +64,10 @@ template <typename T> class binary_tree
                 return false;
             if (s_root->key == key)
                 return true;
-            bool is_child = (find_ancestors(s_root->left, key, ancestors) || find_ancestors(s_root->right, key, ancestors));    
-            if (is_child)
-                ancestors.push_back(s_root);  
-            return is_child;    
+            bool is_ancestor = find_ancestors (s_root->left, key, ancestors) || find_ancestors (s_root->right, key, ancestors);    
+            if (is_ancestor)
+                ancestors.push_back (s_root);  
+            return is_ancestor;    
         }
         
         // Find lowest common ancestor of the nodes with given keys
@@ -83,10 +85,12 @@ template <typename T> class binary_tree
             bool right = find_lowest_common_ancestor (s_root->right, key_1, key_2, lca_key);
             if (right)
                 return true;
-            if (!((is_child (key_1, s_root)) && (is_child (key_2, s_root))))
-                return false;       
-            lca_key = s_root->key;
-            return true;
+            if (is_descendant (key_1, s_root) && is_descendant (key_2, s_root))
+            {
+                lca_key = s_root->key;
+                return true;
+            }
+            return false;
         }
 };
 
@@ -94,7 +98,7 @@ template <typename T> class binary_tree
 template <typename T> void Test_Find_Ancestors (binary_tree<T> * b_tree, T key)
 {
     std::list<node<T> *> ancestors;
-    if (b_tree->find_ancestors(b_tree->root, key, ancestors))
+    if (b_tree->find_ancestors (b_tree->root, key, ancestors))
     {
         std::cout << "Ancestors of node with key " << key << " are: ";
         for (node<T> * a : ancestors)
@@ -110,7 +114,7 @@ template <typename T> void Test_Find_Ancestors (binary_tree<T> * b_tree, T key)
 template <typename T> void Test_Find_Lowest_Common_Ancestor (binary_tree<T> * b_tree, T key_1, T key_2)
 {
     T lca;
-    if (b_tree->find_lowest_common_ancestor(b_tree->root, key_1, key_2, lca))
+    if (b_tree->find_lowest_common_ancestor (b_tree->root, key_1, key_2, lca))
         std::cout << "Lowest common ancestor of node with key " << key_1 << " and node with key " << key_2 << " is: " << lca << std::endl;
     else
         std::cout << "Invalid input!" << std::endl;
@@ -139,28 +143,28 @@ int main ()
     binary_tree<int> * test_binary_tree = new binary_tree<int>;
     std::cout << " **** Tests with empty tree **** " << std::endl;
     Test_Find_Ancestors (test_binary_tree, 1);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 1, 2);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 1, 2);
     std::cout << " **** Tests with invalid input **** " << std::endl;
-    Create_Test_Int_Tree_From_Empty_Or_Return(test_binary_tree);
+    Create_Test_Int_Tree_From_Empty_Or_Return (test_binary_tree);
     Test_Find_Ancestors (test_binary_tree, 0);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 1, 0);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 0, 1);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 0, 9);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 7, 4);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 6, 7);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 1, 0);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 0, 1);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 0, 9);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 7, 4);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 6, 7);
     std::cout << " **** General tests for correctness **** " << std::endl;
     Test_Find_Ancestors (test_binary_tree, 7);
     Test_Find_Ancestors (test_binary_tree, 8);
     Test_Find_Ancestors (test_binary_tree, 2);
     Test_Find_Ancestors (test_binary_tree, 5);
     Test_Find_Ancestors (test_binary_tree, 6);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 3, 4);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 1, 5);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 6, 8);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 8, 4);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 6, 5);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 6, 1);
-    Test_Find_Lowest_Common_Ancestor(test_binary_tree, 2, 5);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 3, 4);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 1, 5);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 6, 8);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 8, 4);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 6, 5);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 6, 1);
+    Test_Find_Lowest_Common_Ancestor (test_binary_tree, 2, 5);
     delete test_binary_tree;
     return 0;
 }
