@@ -1,3 +1,8 @@
+#include "tree_node.cpp"
+#include <string>
+
+using namespace std;
+
 #define KEY_NOT_IN_PATH "-"
 #define EMPTY_PATH ""
 #define LEFT_SON '0'
