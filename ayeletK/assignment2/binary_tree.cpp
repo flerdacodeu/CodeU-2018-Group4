@@ -2,6 +2,7 @@
 // I thought the node class wa enough
 
 #include <list>
+#include "tree_node.cpp"
 
 template <typename Key>
 class BinaryTree {
