@@ -1,63 +1,74 @@
 #include <iostream>
 #include <algorithm>
 
-
 class node {
 	int key;
+	node *left_node, *right_node, *parent_node;
 public:
-	node(int x, node* l = nullptr, node* r = nullptr) : key(x), left_node(l), right_node(r){}
+	node(int x, node* l = nullptr, node* r = nullptr) : key(x), left_node(l), right_node(r), parent_node(nullptr) {
+		if (left_node != nullptr) {
+			left_node->parent_node = this;
+		}
+		if (right_node != nullptr) {
+			right_node->parent_node = this;
+		}
+	}
+
 	~node() {
 		delete left_node;
 		delete right_node;
-	}
-
-	void set_value(int x) {
-		key = x;
 	}
 
 	int get_value() {
 		return key;
 	}
 
-	node* left_node, *right_node, *parent_node;
+	node* get_left() {
+		return left_node;
+	}
+
+	node* get_right() {
+		return right_node;
+	}
+
+	node* get_parent() {
+		return parent_node;
+	}
 };
 
-bool find_key_and_print_way_to_root(int x, node* v) {
-	if (v == nullptr) {
-		return false;
-	}
-	if (x == v->get_value()) {
-		return true;
-	}
-	if (find_key_and_print_way_to_root(x, v->left_node) || find_key_and_print_way_to_root(x, v->right_node)) {
-		std::cout << v->get_value() << ' ';
-		return true;
-	}
-	return false;
-}
-
-void print_way_to_root_for_key(int x, node* v) {
-	if (find_key_and_print_way_to_root(x, v)) {
-		std::cout << "\n";
-	} else {
-		std::cout << "Couldn't find key\n";
-	}
-}
-
-node* find_node(int x, node* v, node* p) {
+node* find_node(int key, node* v) {
 	if (v == nullptr) {
 		return nullptr;
 	}
-	v->parent_node = p;
-	if (x == v->get_value()) {
+	if (key == v->get_value()) {
 		return v;
 	}
-	node* u = find_node(x, v->left_node, v);
+	node* u = find_node(key, v->get_left());
 	if (u != nullptr) {
 		return u;
 	}
-	u = find_node(x, v->right_node, v);
+	u = find_node(key, v->get_right());
 	return u;
+}
+
+void print_path_to_root(node* v) {
+	if (v == nullptr) {
+		return;
+	}
+	while (v->get_parent() != nullptr) {
+		v = v->get_parent();
+		std::cout << v->get_value() << ' ';
+	}
+	std::cout << "\n";
+}
+
+void print_path_to_root_for_key(int key, node* root) {
+	node* v = find_node(key, root);
+	if (v == nullptr) {
+		std::cout << "Couldn't find key\n";
+		return;
+	}
+	print_path_to_root(v);
 }
 
 int count_high(node* v) {
@@ -65,16 +76,16 @@ int count_high(node* v) {
 		return -1;
 	}
 	int ans = 0;
-	while (v->parent_node != nullptr) {
+	while (v->get_parent() != nullptr) {
 		ans++;
-		v = v->parent_node;
+		v = v->get_parent();
 	}
 	return ans;
 }
 
-int find_lca(int x, int y, node* root) {
-	node* u = find_node(x, root, nullptr);
-	node* v = find_node(y, root, nullptr);
+int find_lowest_common_ancestor(int key_1, int key_2, node* root) {
+	node* u = find_node(key_1, root);
+	node* v = find_node(key_2, root);
 	if (u == nullptr || v == nullptr) {
 		return -1;
 	}
@@ -86,11 +97,11 @@ int find_lca(int x, int y, node* root) {
 	}
 	while (u_h > v_h) {
 		u_h--;
-		u = u->parent_node;
+		u = u->get_parent();
 	}
 	while (u != v) {
-		u = u->parent_node;
-		v = v->parent_node;
+		u = u->get_parent();
+		v = v->get_parent();
 	}
 	return u->get_value();
 }
