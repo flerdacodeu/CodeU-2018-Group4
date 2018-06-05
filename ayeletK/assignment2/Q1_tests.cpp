@@ -63,7 +63,6 @@ bool test_get_all_ancestors(){
     RUN_TEST(test_ancestors_when_key_is_in_root);
     RUN_TEST(test_ancestors_of_example);
     dec_indentation();
-    // RUN_TEST(test_ancestors_with_empty_tree);
     return true;
 }
 
