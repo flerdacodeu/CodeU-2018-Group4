@@ -5,40 +5,15 @@
 #include<algorithm>
 #include<array> 
 #include<queue>
+#include"Node.h"
 
 using namespace std;
 
 template<typename T>
-struct Node
-{
-	T key;
-	Node *left, *right, *parent;
-
-	Node() {
-		this->left = NULL;
-		this->right = NULL;
-		this->parent = NULL;
-	}
-
-	Node(T key, Node* parent) :Node() {
-		this->key = key;
-		this->parent = parent;
-	}
-	Node(T key, Node* left, Node* right, Node* parent) {
-		this->key = key;
-		this->left = left;
-		this->right = right;
-		this->parent = parent;
-	}
-};
-
-template<typename T>
 Node<T>* search(Node<T>* head, T key)
 {
-	if (head == NULL){
-		cout << "Tree is empty";
-		return NULL;
-	}
+	// Check if the tree is empty
+	if (head == NULL)	return NULL;
 
 	Node<T>* current_node = head;
 	queue<Node<T>* > unvisited;
@@ -58,7 +33,8 @@ Node<T>* search(Node<T>* head, T key)
 template<typename T>
 void print_ancestors(Node<T>* head, T key){
 	Node<int>* node = search(head, key);
-	if (node == head) cout << "This node is the root";
+	if (head == NULL) cout << "This tree is empty";
+	else if (node == head) cout << "This node is the root";
 	else if (node != NULL){
 		// Print the ancestors
 		while (node->parent != NULL){
@@ -73,8 +49,7 @@ void print_ancestors(Node<T>* head, T key){
 int main(){
 
 	// Node itself is condisered to be its ancestor
-	Node<int>* tree = new Node<int>();
-	tree->key = 7;
+	Node<int>* tree = new Node<int>(7);
 	tree->left = new Node<int>(3, tree);
 	tree->right = new Node<int>(4, tree);
 	tree->left->left = new Node<int>(2, tree->left);
