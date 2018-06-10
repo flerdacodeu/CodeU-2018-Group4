@@ -72,11 +72,8 @@ void print_path_to_root_for_key(int key, node* root) {
 }
 
 int count_high(node* v) {
-	if (v == nullptr) {
-		return -1;
-	}
-	int ans = 0;
-	while (v->get_parent() != nullptr) {
+	int ans = -1;
+	while (v != nullptr) {
 		ans++;
 		v = v->get_parent();
 	}
