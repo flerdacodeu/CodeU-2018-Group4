@@ -28,10 +28,11 @@ class BinaryTree {
     }
   }
   void destroy_binary_tree(Node<Key>* curr_node){
-    if (!curr_node){
+    if (curr_node){
       destroy_binary_tree(curr_node->left);
       destroy_binary_tree(curr_node->right);
-      delete(curr_node);
+      delete curr_node;
+      curr_node = nullptr;
     }
   }
   Node<Key>* find(Key key, Node<Key>* curr_node){
