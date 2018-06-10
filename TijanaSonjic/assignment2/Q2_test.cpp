@@ -1,4 +1,5 @@
 #include "Node.h"
+#include "Q2.h"
 
 
 //
@@ -22,10 +23,10 @@ int main() {
 	Node* nullRoot = nullptr;
 	Node* notInTheTree = new Node(100);
 
-	node2->insertLeftChild(node1)->insertRightChild(node6);
-	node3->insertLeftChild(node2)->insertRightChild(node5);
-	node4->insertRightChild(node8);
-	root->insertLeftChild(node3)->insertRightChild(node4);
+	node2->setLeftChild(node1)->setRightChild(node6);
+	node3->setLeftChild(node2)->setRightChild(node5);
+	node4->setRightChild(node8);
+	root->setLeftChild(node3)->setRightChild(node4);
 
 	// Both nodes are in the tree
 	Node* commonNode = firstCommonAncestor(root, node6, node8);
@@ -54,6 +55,8 @@ int main() {
 		cout << "First common ancestor is node " << commonNode->getInfo() << " ." << endl;
 	else
 		cout << "These nodes don't have common ancestor." << endl;
+
+	delete root;
 
 	system("PAUSE");
 	return 0;
