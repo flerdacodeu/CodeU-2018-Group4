@@ -29,6 +29,7 @@ template <typename T> class binary_tree
             delete s_root;   
         }
         
+        // Here we assume that node is NOT its own descendant
         bool is_descendant (T& key, node<T> * parent) 
         {
             if (parent == NULL)
