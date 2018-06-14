@@ -1,14 +1,9 @@
 #ifndef GRID_HPP
 #define GRID_HPP
 
-#include <iostream>
 #include <vector>
 
 using namespace std;
-
-enum Direction {
-    LEFT, RIGHT, UP, DOWN, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, NONE
-};
 
 class Grid {
 private:
@@ -27,15 +22,15 @@ public:
 
     ~Grid() {}
 
-    int getHeight() {
+    int getHeight() const {
         return this->height;
     }
 
-    int getWidth() {
+    int getWidth() const {
         return this->width;
     }
 
-    bool getChar(const int row, const int col, char &c) {
+    bool getChar(const int row, const int col, char &c) const {
         if (row < 0 || row >= this->height || col < 0 || col >= this->width) {
             return false;
         }
@@ -43,47 +38,6 @@ public:
         int idx = row * this->width + col;
         c = this->grid[idx];
         return true;
-    }
-
-    void getNextIdxs(const int row, const int col, int &nextRow, int &nextCol, Direction dir = NONE) {
-        switch (dir) {
-            case LEFT:
-                nextRow = row;
-                nextCol = col - 1;
-                break;
-            case RIGHT:
-                nextRow = row;
-                nextCol = col + 1;
-                break;
-            case UP:
-                nextRow = row - 1;
-                nextCol = col;
-                break;
-            case DOWN:
-                nextRow = row + 1;
-                nextCol = col;
-                break;
-            case TOP_LEFT:
-                nextRow = row - 1;
-                nextCol = col - 1;
-                break;
-            case TOP_RIGHT:
-                nextRow = row - 1;
-                nextCol = col + 1;
-                break;
-            case BOTTOM_LEFT:
-                nextRow = row + 1;
-                nextCol = col - 1;
-                break;
-            case BOTTOM_RIGHT:
-                nextRow = row + 1;
-                nextCol = col + 1;
-                break;
-            default:
-                nextRow = row;
-                nextCol = col;
-                break;
-        }
     }
 };
 
