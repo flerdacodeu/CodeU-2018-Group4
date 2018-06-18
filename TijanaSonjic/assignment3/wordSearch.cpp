@@ -22,10 +22,10 @@ typedef struct delta {
 } Delta;
 
 GridCell grid[][3] = {
-						{ {'s', false}, {'p', false}, {'g', false} },
-						{ {'t', false}, {'r', false}, {'n', false} },
-						{ {'s', false}, {'u', false}, {'i', false} }
-					};
+			  { {'s', false}, {'p', false}, {'g', false} },
+			  { {'t', false}, {'r', false}, {'n', false} },
+			  { {'s', false}, {'u', false}, {'i', false} }
+		     };
 
 // Directions for adjacent cells
 Delta difference[8] = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };
@@ -150,9 +150,7 @@ int main() {
 		cout << result[i] << endl;
 
 	EXPECT_EQ(findAllWordsFormDictionaryInTheGrid(dictionary, grid), correctAnswers);
-
 	EXPECT_EQ(findAllWordsFormDictionaryInTheGrid(emptyDictionary, grid), empty);
-
 	EXPECT_EQ(findAllWordsFormDictionaryInTheGrid(dictionary, new GridCell[3][3]), empty);
 
 	system("PAUSE");
