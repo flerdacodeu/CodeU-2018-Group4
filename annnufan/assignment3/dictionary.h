@@ -6,7 +6,7 @@
 class dictionary{
 	std::set<std::string> words, prefixes;
 	
-	void find_all_prefixes() {
+	void compute_all_prefixes() {
 		std::string prefix = "";
 		for (std::string word : words) {
 			prefix = "";
@@ -19,7 +19,7 @@ class dictionary{
 	
 public:
 	dictionary(std::set<std::string> w) : words(w) {
-		find_all_prefixes();
+		compute_all_prefixes();
 	}
 
 	dictionary() {}
