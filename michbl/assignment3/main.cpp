@@ -8,14 +8,6 @@ enum Direction {
     LEFT, RIGHT, UP, DOWN, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
 };
 
-// function declarations
-void getNextIdxs(const int row, const int col, const Direction dir, int &nextRow, int &nextCol);
-
-set<string> wordSearch(const Dictionary &dict, const Grid &grid);
-
-void wordSearchBT(const Dictionary &dict, const Grid &grid, int row, int col, set<string> &res, string word);
-
-// function implementations
 void getNextIdxs(const int row, const int col, const Direction dir, int &nextRow, int &nextCol) {
     switch (dir) {
         case LEFT:
@@ -57,31 +49,21 @@ void getNextIdxs(const int row, const int col, const Direction dir, int &nextRow
     }
 }
 
-set<string> wordSearch(const Dictionary &dict, const Grid &grid) {
-    int h = grid.getHeight();
-    int w = grid.getWidth();
-    set<string> result;
-    result.clear();
-    for (int row = 0; row < h; row++) {
-        for (int col = 0; col < w; col++) {
-            wordSearchBT(dict, grid, row, col, result, "");
-        }
-    }
-    return result;
-}
-
-void wordSearchBT(const Dictionary &dict, const Grid &grid, int row, int col, set<string> &res, string word) {
+void wordSearchBT(const Dictionary &dict, Grid &grid, int row, int col, set<string> &res, string &word) {
     char c;
-    if (!grid.getChar(row, col, c)) {
+    if (!grid.getChar(row, col, c) || grid.visitedCell(row, col)) {
         return;
     }
 
-    word += c;
+    word.push_back(c);
+    grid.markVisited(row, col);
     if (dict.isWord(word)) {
         res.insert(word);
     }
 
     if (!dict.isPrefix(word)) {
+        word.pop_back();
+        grid.markUnvisited(row, col);
         return;
     }
 
@@ -91,6 +73,23 @@ void wordSearchBT(const Dictionary &dict, const Grid &grid, int row, int col, se
         getNextIdxs(row, col, dir, nextRow, nextCol);
         wordSearchBT(dict, grid, nextRow, nextCol, res, word);
     }
+    word.pop_back();
+    grid.markUnvisited(row, col);
+}
+
+set<string> wordSearch(const Dictionary &dict, Grid &grid) {
+    int h = grid.getHeight();
+    int w = grid.getWidth();
+    set<string> result;
+    result.clear();
+    for (int row = 0; row < h; row++) {
+        for (int col = 0; col < w; col++) {
+            string word = "";
+            grid.clearVisited();
+            wordSearchBT(dict, grid, row, col, result, word);
+        }
+    }
+    return result;
 }
 
 int main() {
@@ -124,6 +123,15 @@ int main() {
     Dictionary dict4 = Dictionary();
     result = wordSearch(dict4, grid);
     EXPECT_EQ(result.size(), 0);
+
+    // test not visiting same cell twice in same word
+    Dictionary dict5({"CAR", "CARD", "CART", "CAT", "CARDR", "TATA", "TACARA"});
+    result = wordSearch(dict5, grid);
+
+    EXPECT_EQ(result.size(), 3);
+    EXPECT_TRUE(result.find("CAR") != result.end());
+    EXPECT_TRUE(result.find("CARD") != result.end());
+    EXPECT_TRUE(result.find("CAT") != result.end());
 
     return 0;
 }
