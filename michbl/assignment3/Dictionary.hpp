@@ -25,7 +25,7 @@ private:
         for (char ch : word) {
             auto it = currentChildren->find(ch);
             if (it != currentChildren->end()) { // current node has a child ch
-                currentChildren = &(*it).second->children;
+                currentChildren = &it->second->children;
                 continue;
             }
             //current node doesn't have a child ch
@@ -42,7 +42,7 @@ private:
             return;
         }
         for (auto it = node->children.begin(); it != node->children.end(); it++) {
-            destroyDict((*it).second);
+            destroyDict(it->second);
         }
         delete node;
     }
@@ -74,7 +74,7 @@ public:
             if (it == currentChildren.end()) { // current node doesn't have a child ch
                 return false;
             }
-            currentChildren = (*it).second->children;
+            currentChildren = it->second->children;
         }
         if (lastNodeChildren != nullptr) {
             *lastNodeChildren = currentChildren;
