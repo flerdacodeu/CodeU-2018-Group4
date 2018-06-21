@@ -49,6 +49,20 @@ inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
   os << "}";
 }
 
+// Print operator for unordered sets. Must be defined in order to use EXPECT_EQ macro
+// with unordered sets.
+template <class T>
+inline std::ostream& operator<<(std::ostream& os, const std::unordered_set<T>& s) {
+  os << "{";
+  for (auto it = s.begin(); it != s.end(); ++it)
+  {
+    if (it != s.begin())
+      os << ", "; 
+    os << *it;
+  }
+  os << "}";
+}
+
 // Example usage:
 
 // EXPECT_TRUE(1 < 3);  // Prints nothing.
