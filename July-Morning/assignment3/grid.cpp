@@ -9,43 +9,37 @@ LetterGrid::LetterGrid()
 // Delete all data from grid
 void LetterGrid::clear_all ()
 {
-    for (auto row : grid)
-        row.clear();
     grid.clear(); 
     width = 0;
     height = 0;
 }
 
 // Check if coordinates are valid for current grid
-bool LetterGrid::is_xy_valid (int x, int y)
+bool LetterGrid::is_ij_valid (int i, int j)
 {
-    if ((x < 0) || (x >= width))
-        return false;
-    if ((y < 0) || (y >= height))
-        return false;
-    return true;    
+    return i >= 0 && i < height && j >= 0 && j < width;   
 }
 
-std::unordered_set<std::string> LetterGrid::find_words_from_position (const Dictionary& dict, std::vector<std::vector<bool> > is_cell_visited, std::string cur_word, int x, int y)
+std::unordered_set<std::string> LetterGrid::find_words_from_position (const Dictionary& dict, std::vector<std::vector<bool> > is_cell_visited, std::string cur_word, int i, int j)
 {
     std::unordered_set<std::string> words_from_pos;
-    if (!is_xy_valid(x, y))
+    if (!is_ij_valid(i, j))
         return words_from_pos;
-    if (is_cell_visited[y][x])
+    if (is_cell_visited[i][j])
         return words_from_pos;    
-    cur_word += grid[y][x];
-    is_cell_visited[y][x] = true;
+    cur_word += grid[i][j];
+    is_cell_visited[i][j] = true;
     if (dict.is_word(cur_word))
         words_from_pos.insert(cur_word);
     if (dict.is_prefix(cur_word)) 
     {
-        for (int dx : {-1, 0, 1}) 
+        for (int di : {-1, 0, 1}) 
         {
-            for (int dy : {-1, 0, 1}) 
+            for (int dj : {-1, 0, 1}) 
             {
-                if (dx == 0 && dy == 0) 
+                if (di == 0 && dj == 0) 
                     continue;
-                std::unordered_set<std::string> dxdy_words = find_words_from_position (dict, is_cell_visited, cur_word, x + dx, y + dy);
+                std::unordered_set<std::string> dxdy_words = find_words_from_position (dict, is_cell_visited, cur_word, i + di, j + dj);
                 words_from_pos.insert(dxdy_words.begin(), dxdy_words.end());
             }
         }    
@@ -60,14 +54,14 @@ bool LetterGrid::init (std::vector<std::string> letter_rows)
     if (height == 0)
         return false;
     width = letter_rows[0].size();    
-    for (int j = 0; j < height; j++)
+    for (int i = 0; i < height; i++)
     {
-        if (letter_rows[j].size() != width)
+        if (letter_rows[i].size() != width)
         {
             clear_all();
             return false;
         }    
-        grid.emplace_back(letter_rows[j].begin(), letter_rows[j].end());    
+        grid.emplace_back(letter_rows[i].begin(), letter_rows[i].end());    
     }
     return true;
 }
@@ -79,9 +73,9 @@ bool LetterGrid::init (std::vector<std::string> letter_rows)
 std::unordered_set<std::string> LetterGrid::find_all_words_from_dictionary (const Dictionary& dict)
 {
     std::unordered_set<std::string> found_words;
-    for (int i = 0; i < width; i++)
+    for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < height; j++)
+        for (int j = 0; j < width; j++)
         {
             std::string empty_word("");
             std::vector<std::vector<bool> > is_cell_visited(height, std::vector<bool>(width, false));
