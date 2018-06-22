@@ -15,7 +15,7 @@ class Dictionary
         void add_word (std::string w);
         
         // Add vector of words to dictionary
-        void add_words (std::unordered_set<std::string> w_vec);
+        void add_words (const std::unordered_set<std::string>& w_vec);
         
         // Check if word is in dictionary
         bool is_word (std::string w) const;
