@@ -14,7 +14,7 @@ class LetterGrid
         void clear_all ();
         
         // Check if coordinates are valid for current grid
-        bool is_xy_valid (int x, int y);
+        bool is_ij_valid (int i, int j);
         
         // Find all words starting from given position in grid 
         std::unordered_set<std::string> find_words_from_position (const Dictionary& dict, std::vector<std::vector<bool> > is_cell_visited, std::string cur_word, int x, int y);
