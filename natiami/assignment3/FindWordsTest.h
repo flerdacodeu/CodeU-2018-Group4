@@ -8,8 +8,11 @@ class FindWordsTest{
 public:
 	void test();
 private:
-	Grid* initGrid();
-	Dictionary* initDictionary();
+	Dictionary* dictionary;
+	Grid* grid;
+
+	void initGrid();
+	void initDictionary();
 	void test_findAllWords();
 	void test_EmptyGrid();
 	void test_EmptyDictionary();
