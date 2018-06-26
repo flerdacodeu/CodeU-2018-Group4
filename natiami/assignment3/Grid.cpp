@@ -1,14 +1,11 @@
 #include"Grid.h"
 
 Grid::Grid(){
-	this->cells = vector<vector<char> >();
 }
 
-Grid::Grid(int width, int height){
-	this->width = width;
-	this->height = height;
-	this->cells = vector<vector<char> >(height, vector<char>(width));
-	this->moves = { 0, -1, -1, 0, 0, 1, 1, 0, -1, -1, -1, 1, 1, -1, 1, 1 };
+Grid::Grid(int width, int height) : width(width), height(height),
+cells(height, vector<char>(width)){
+	moves = { { 0, -1 }, { -1, 0 }, { 0, 1 }, { 1, 0 }, { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 }};
 }
 
 bool Grid::checkBordersOfGrid(int i, int j){
@@ -21,11 +18,11 @@ void Grid::findWordsFromACell(Dictionary* dictionary, vector<vector<bool> > visi
 	visited[i][j] = true;
 
 	if (dictionary->isPrefix(word)){
-		for (size_t k = 0; k < this->movesSize; k += 2)
+		for (const pair<int, int>& move : this->moves) 
 		{
-			if (checkBordersOfGrid(i + this->moves[k], j + this->moves[k + 1])){
-				if (!visited[i + this->moves[k]][j + this->moves[k + 1]])
-					findWordsFromACell(dictionary, visited, words, i + this->moves[k], j + this->moves[k + 1], word);
+			if (checkBordersOfGrid(i + move.first, j + move.second)){
+				if (!visited[i + move.first][j + move.second])
+					findWordsFromACell(dictionary, visited, words, i + move.first, j + move.second, word);
 			}
 
 		}
@@ -36,7 +33,7 @@ void Grid::findWordsFromACell(Dictionary* dictionary, vector<vector<bool> > visi
 set<string> Grid::filterWords(Dictionary* dictionary, set<string>& words){
 	set<string>::iterator it;
 	for (it = words.begin(); it != words.end();) {
-		if (!dictionary->isWord(*it)){
+		if (!dictionary->isWord(string(*it))){
 			words.erase(it++);
 		}
 		else {
