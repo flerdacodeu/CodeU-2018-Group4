@@ -8,7 +8,7 @@ public:
 	vector<vector<char> > cells;
 	int width;
 	int height;
-	vector<int> moves;
+	vector<pair<int, int>> moves;
 	const int movesSize = 16;
 
 	Grid();
