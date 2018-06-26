@@ -11,8 +11,8 @@ public:
 	set<string> prefixes;
 
 	Dictionary();
-	Dictionary(set<string> words, set<string> prefixes);
+	Dictionary(set<string>& words, set<string>& prefixes);
 
-	bool isWord(string word);
-	bool isPrefix(string prefix);
+	bool isWord(string& word) const;
+	bool isPrefix(string& prefix) const;
 };
