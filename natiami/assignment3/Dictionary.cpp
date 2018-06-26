@@ -1,18 +1,18 @@
-#include "Dictionary.h"
+#include<iostream>
+#include<string>
+#include<vector>
+#include<set>
 
-Dictionary::Dictionary(){
-	this->words = set<string>();
-	this->prefixes = set<string>();
-}
+using namespace std;
 
-Dictionary::Dictionary(set<string> words, set<string> prefixes){
-	this->words = words;
-	this->prefixes = prefixes;
-}
+class Dictionary{
+public:
+	set<string> words;
+	set<string> prefixes;
 
-bool Dictionary::isWord(string word){
-	return words.find(word) != words.end();
-}
-bool Dictionary::isPrefix(string prefix){
-	return prefixes.find(prefix) != prefixes.end();
-}
+	Dictionary();
+	Dictionary(set<string>& words, set<string>& prefixes);
+
+	bool isWord(string& word) const;
+	bool isPrefix(string& prefix) const;
+};
