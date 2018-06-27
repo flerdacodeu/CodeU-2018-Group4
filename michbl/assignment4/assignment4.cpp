@@ -3,57 +3,36 @@
 
 #define LAND true
 #define SEA false
-#define UNMARKED 0
+
+enum Marking {UNMARKED, MARKED};
 
 using namespace std;
 
-int searchNeighbors(int rows, int cols, int row, int col, int **islandMark) {
-    if (row < 0 || row >= rows || col < 0 || col >= cols) {
-        return -1;
-    }
-    if (row - 1 >= 0 && islandMark[row - 1][col] != UNMARKED) {
-        return islandMark[row - 1][col];
-    }
-    if (col - 1 >= 0 && islandMark[row][col - 1] != UNMARKED) {
-        return islandMark[row][col - 1];
-    }
-    if (row + 1 < rows && islandMark[row + 1][col] != UNMARKED) {
-        return islandMark[row + 1][col];
-    }
-    if (col + 1 < cols && islandMark[row][col + 1] != UNMARKED) {
-        return islandMark[row][col + 1];
-    }
-    return UNMARKED;
-}
-
-void markIsland(int rows, int cols, int row, int col, int **islandMark, bool **grid, int islandNum) {
-    if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col] == SEA || islandMark[row][col] != UNMARKED) {
+void markIsland(int rows, int cols, int row, int col, Marking **islandMark, bool **grid) {
+    if (row < 0 || row >= rows || col < 0 || col >= cols || grid[row][col] == SEA || islandMark[row][col] == MARKED) {
         return;
     }
-    islandMark[row][col] = islandNum;
-    markIsland(rows, cols, row + 1, col, islandMark, grid, islandNum);
-    markIsland(rows, cols, row, col + 1, islandMark, grid, islandNum);
-    markIsland(rows, cols, row - 1, col, islandMark, grid, islandNum);
-    markIsland(rows, cols, row, col - 1, islandMark, grid, islandNum);
+    islandMark[row][col] = MARKED;
+    markIsland(rows, cols, row + 1, col, islandMark, grid);
+    markIsland(rows, cols, row, col + 1, islandMark, grid);
+    markIsland(rows, cols, row - 1, col, islandMark, grid);
+    markIsland(rows, cols, row, col - 1, islandMark, grid);
 }
 
 int countIslands(int rows, int cols, bool **grid) {
-    int **islandMark = new int*[rows];
+    Marking **islandMark = new Marking*[rows];
     for (int i = 0; i < rows; i ++) {
-        islandMark[i] = new int[cols];
+        islandMark[i] = new Marking[cols];
         for (int j = 0; j < cols; j++) {
-            islandMark[i][j] = 0;
+            islandMark[i][j] = UNMARKED;
         }
     }
     int islandCount = 0;
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             if (grid[i][j] == LAND && islandMark[i][j] == UNMARKED) {
-                int islandNum = searchNeighbors(rows, cols, i, j, islandMark);
-                if (islandNum == UNMARKED) {
-                    islandNum = ++islandCount;
-                }
-                markIsland(rows, cols, i, j, islandMark, grid, islandNum);
+                islandCount++;
+                markIsland(rows, cols, i, j, islandMark, grid);
             }
         }
     }
