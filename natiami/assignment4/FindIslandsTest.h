@@ -10,7 +10,7 @@ public:
 private:
 	void test_findNumberOfIslands();
 	void test_diagonalLands();
-	void test_EmptyMapOfTiles();
+	void test_EmptyisLandTile();
 	void test_allWater();
 	void test_allLand();
 };
