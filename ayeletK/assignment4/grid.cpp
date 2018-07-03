@@ -1,6 +1,10 @@
 #include "position.cpp"
 #include <vector>
 #include <unsorted_set>
+#include <stdlib.h>
+
+#define DELTA {-1,0,1}
+using namespace std;
 
 template <typename T>
 class Grid{
