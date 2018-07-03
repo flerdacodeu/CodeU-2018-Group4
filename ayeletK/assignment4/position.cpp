@@ -1,4 +1,5 @@
 #include <utility>
+using namespace std;
 
 class Position{
     pair<int,int> _pos;
