@@ -14,6 +14,12 @@ void test_empty_case() {
 	EXPECT_EQ(count_islands_on_map(empty_map), ans);
 }
 
+void test_empty_1_case() {
+	std::vector<std::vector<bool>> empty_map({{}, {}, {}});
+	int ans = 0;
+	EXPECT_EQ(count_islands_on_map(empty_map), ans);
+}
+
 void test_map_without_islands() {
 	std::vector<std::vector<bool>> map_without_islands({{false, false}, {false, false}, {false, false}});
 	int ans = 0;
@@ -35,6 +41,7 @@ void test_one_hard_island() {
 int main() {
 	test_for_example();
 	test_empty_case();
+	test_empty_1_case();
 	test_map_without_islands();
 	test_one_big_island();
 	test_one_hard_island();
