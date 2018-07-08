@@ -1,80 +1,55 @@
 #define EXAMPLE_SIZE 4
-#define ONE 1
-#define TWO 2
 #include "codeu_test_lib.h"
 
+Map_vec example_vec = { {WATER, LAND,  WATER, LAND},
+                        {LAND,  LAND,  WATER, WATER},
+                        {WATER, WATER, LAND,  WATER},
+                        {WATER, WATER, LAND,  WATER}    };
 
-vector<vector<bool>> example_vec = {    {WATER, LAND,  WATER, LAND},
-                                        {LAND,  LAND,  WATER, WATER},
-                                        {WATER, WATER, LAND,  WATER},
-                                        {WATER, WATER, LAND,  WATER}    };
 class Tests{
-    int _rows;
-    int _cols;
-    bool** _data;
-    DFS<bool> _dfs;
+    Map_vec* _data;
     bool _delete_data;
     Solution _solution;
     
     void example_setup(){
-        _rows = EXAMPLE_SIZE;
-        _cols = EXAMPLE_SIZE;
-        _data = new bool*[EXAMPLE_SIZE];
-        
-        for (int row = 0; row < _rows; ++row){
-            _data[row] = new bool[EXAMPLE_SIZE];
-            for (int col = 0; col < _cols; ++col){
-                _data[row][col] = example_vec[row][col];
-            }
-        }
-        
+        _data = &example_vec;
     }
-    bool test_count_islands_zero_islands(){
-        bool map[ONE][ONE] = {{WATER}};
+    void test_count_islands_zero_islands(){
+        Map_vec map_vec = {{WATER}};
         int expected = 0;
-        _solution = Solution(ONE, ONE, (bool**) map);
-        int actual = _solution.count_islands();
+        Solution sol = Solution(&map_vec);
+        int actual = sol.count_islands();
         EXPECT_EQ(expected, actual);
-        return true;
     }
-    bool test_count_islands_digonal_islands(){
-        bool map[TWO][TWO] = {{LAND,WATER},{WATER,LAND}};
+    void test_count_islands_digonal_islands(){
+        Map_vec map_vec = {{LAND,WATER},{WATER,LAND}};
         int expected = 2;
-        _solution = Solution(ONE, ONE, (bool**) map);
-        int actual = _solution.count_islands();
+        Solution sol = Solution(&map_vec);
+        int actual = sol.count_islands();
         EXPECT_EQ(expected, actual);
-        return true;
     }
-    bool test_count_islands_example(){
+    void test_count_islands_example(){
         int expected = 3;
         int actual = _solution.count_islands();
         EXPECT_EQ(expected, actual);
-        return true;
     }
 public:
-    Tests(): _dfs(LAND) {
+    Tests() {
         example_setup();
-        _delete_data = true;
-        _solution = Solution(_rows, _cols, _data);
+        _solution = Solution(_data);
+        Map map(_data);
     }
-    Tests(int rows, int cols, bool** data): _rows(rows), _cols(cols), _data(data), _dfs(LAND), _solution(rows,cols,data){
-        _delete_data = false;
+    Tests(Map_vec* map_vec): _data(map_vec), _solution(_data){
+        Map map(_data);
     }
-    ~Tests(){
-        if (_delete_data) {
-            for (int row = 0; row < _rows; ++row){
-                delete _data[row];
-            }
-            delete _data;
-        }
-    }
+    ~Tests(){}
     void run_tests(){
         RUN_TEST(test_count_islands_zero_islands);
         RUN_TEST(test_count_islands_digonal_islands);
         RUN_TEST(test_count_islands_example);
     }
     // for user tests
-    void run_test(bool (*test_func)()){
+    void run_test(void (*test_func)()){
         RUN_TEST(test_func);
     }
 };
