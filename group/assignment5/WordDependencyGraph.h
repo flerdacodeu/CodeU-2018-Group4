@@ -18,7 +18,6 @@ public:
 		vector<char> lexicographicalOrder;
 
 		int numberOfLetters = graph.size();
-		// Mark all the vertices as not visited
 		set<char> visited;
 		
 		for (unordered_map<char, vector<char>>::iterator it = graph.begin(); it != graph.end(); it++) {
@@ -34,12 +33,9 @@ public:
 private:
 
 	void topologicalSortUtil(char key, set<char>& visited, vector<char>& lexicographicalOrder){
-		// Mark the current node as visited.
 		visited.insert(key);
-
 		vector<char> children = graph[key];
-		int i = 0;
-
+		
 		for (char ch : children) {
 			if (visited.find(ch) == visited.end())
 				topologicalSortUtil(ch, visited, lexicographicalOrder);
@@ -76,7 +72,7 @@ private:
 							vector<char>& childrenOfChar1 = graph[ch1];
 
 							if (childrenOfChar1.size() > 0) {
-								// check if ch2 is alredy inserted as a child of ch1
+								// check if ch2 is already inserted as a child of ch1
 								if (!containsChar(childrenOfChar1, ch2)) {
 									childrenOfChar1.push_back(ch2);
 								}
