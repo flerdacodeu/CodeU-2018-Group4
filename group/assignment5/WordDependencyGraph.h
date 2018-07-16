@@ -17,14 +17,12 @@ public:
 	vector<char> topologicalSort(){
 		vector<char> lexicographicalOrder;
 
-		int numberOfLetters = graph.size();
 		set<char> visited;
 		
 		for (unordered_map<char, vector<char>>::iterator it = graph.begin(); it != graph.end(); it++) {
 			char currentChar = it->first;
 			if (visited.find(currentChar)==visited.end())
 				topologicalSortUtil(currentChar, visited, lexicographicalOrder);
-
 		}
 
 		return reverseOrder(lexicographicalOrder);
@@ -32,10 +30,10 @@ public:
 
 private:
 
-	void topologicalSortUtil(char key, set<char>& visited, vector<char>& lexicographicalOrder){
+	void topologicalSortUtil(char key, set<char>& visited, vector<char>& lexicographicalOrder) {
 		visited.insert(key);
 		vector<char> children = graph[key];
-		
+
 		for (char ch : children) {
 			if (visited.find(ch) == visited.end())
 				topologicalSortUtil(ch, visited, lexicographicalOrder);
