@@ -6,6 +6,8 @@ void AlphabetFromDictionary::setDictionary(vector<string> dictionary) {
 
 void AlphabetFromDictionary::initializeClassVars() {
     vector<char> alphabetCharacters = findAlphabetCharacters();
+    this->charPriorityGraph.clear();
+    this->numOfPriorCharacters.clear();
     for (auto c : alphabetCharacters) {
         this->charPriorityGraph[c] = set<char>();
         this->numOfPriorCharacters[c] = 0;
