@@ -30,7 +30,7 @@ public:
 private:
     void initializeClassVars();
     void findAlphabetCharacters();
-    int findFirstMismatchIndex(string str1, string str2);
+    int findFirstMismatchIndex(const string &str1, const string &str2);
     void createCharPriorityGraph();
     void topologicalSortUtil(char letter, vector<bool> &visited, stack<char> &stack);
     void topologicalSort();
