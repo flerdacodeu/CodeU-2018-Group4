@@ -15,7 +15,8 @@ int main() {
     idxs.clear();
     expectedChars = vector<bool>(pow(2, CHAR_BIT), false);
     actualChars = vector<bool>(pow(2, CHAR_BIT), false);
-    result = afd.findAlphabet(alphabet);
+    alphabet = afd.getAlphabet();
+    result = afd.isDictionaryConsistent();
     EXPECT_TRUE(result);
     EXPECT_EQ(4, alphabet.size());
     for (char c : {'A', 'R', 'C', 'T'}) {
@@ -33,16 +34,18 @@ int main() {
     // test 2 - empty dictionary
     dictionary.clear();
     afd.setDictionary(dictionary);
-    result = afd.findAlphabet(alphabet);
+    alphabet = afd.getAlphabet();
+    result = afd.isDictionaryConsistent();
     EXPECT_TRUE(result);
     EXPECT_EQ(0, alphabet.size());
 
     // test 3 - inconsistent dictionary
     dictionary = {"ART", "RAT", "ABS"};
     afd.setDictionary(dictionary);
-    result = afd.findAlphabet(alphabet);
+    alphabet = afd.getAlphabet();
+    result = afd.isDictionaryConsistent();
     EXPECT_FALSE(result);
-    EXPECT_EQ(0, alphabet.size());
+    EXPECT_EQ(5, alphabet.size());
 
     // test 4
     dictionary = {"ABC", "DEFG", "HIJK", "LMN", "OPQRS", "TU", "VWXYZ"};
@@ -50,7 +53,8 @@ int main() {
     expectedChars = vector<bool>(pow(2, CHAR_BIT), false);
     actualChars = vector<bool>(pow(2, CHAR_BIT), false);
     idxs.clear();
-    result = afd.findAlphabet(alphabet);
+    alphabet = afd.getAlphabet();
+    result = afd.isDictionaryConsistent();
     EXPECT_TRUE(result);
     EXPECT_EQ(26, alphabet.size());
     for (char c = 'A'; c <= 'Z'; c++) {
@@ -74,7 +78,8 @@ int main() {
     expectedChars = vector<bool>(pow(2, CHAR_BIT), false);
     actualChars = vector<bool>(pow(2, CHAR_BIT), false);
     idxs.clear();
-    result = afd.findAlphabet(alphabet);
+    alphabet = afd.getAlphabet();
+    result = afd.isDictionaryConsistent();
     EXPECT_TRUE(result);
     EXPECT_EQ(14, alphabet.size());
     for (char c : {'a', 'b', 'c', 'd', 'p', '^', 'l', 'k', '*', '$', 'o', 'r', '0', '1'}) {

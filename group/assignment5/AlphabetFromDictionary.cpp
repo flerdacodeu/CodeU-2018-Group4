@@ -1,94 +1,120 @@
 #include "AlphabetFromDictionary.hpp"
 
-void AlphabetFromDictionary::setDictionary(vector<string> dictionary) {
+AlphabetFromDictionary::AlphabetFromDictionary(const vector<string> &dictionary) : dictionary(dictionary) {
+    this->setDictionary(dictionary);
+}
+
+void AlphabetFromDictionary::setDictionary(const vector<string> &dictionary) {
     this->dictionary = dictionary;
+    this->initializeClassVars();
+    this->findAlphabet();
+}
+
+vector<char> AlphabetFromDictionary::getAlphabet() {
+    return this->orderedAlphabet;
+}
+
+bool AlphabetFromDictionary::isDictionaryConsistent() {
+    return !this->isGraphCyclic;
 }
 
 void AlphabetFromDictionary::initializeClassVars() {
-    vector<char> alphabetCharacters = findAlphabetCharacters();
+    this->findAlphabetCharacters();
+    this->isGraphCyclic = false;
+    this->orderedAlphabet.clear();
     this->charPriorityGraph.clear();
-    this->numOfPriorCharacters.clear();
-    for (auto c : alphabetCharacters) {
-        this->charPriorityGraph[c] = set<char>();
-        this->numOfPriorCharacters[c] = 0;
+    for (auto c : this->alphabetCharacters) {
+        this->charPriorityGraph[c] = vector<bool>(NUM_OF_NATIVE_CHARS, false);
     }
 }
 
-bool AlphabetFromDictionary::findAlphabet(vector<char> &alphabet) {
-    this->initializeClassVars();
-    this->createCharPriorityGraph();
-
-    // find topological sort of characters graph to find alphabet
-    return topologicalSort(alphabet);
-}
-
-void AlphabetFromDictionary::updateNumOfPriorCharacters(const char origin) {
-    const set<char> followingChars = this->charPriorityGraph.at(origin);
-    for (char c : followingChars) {
-        this->numOfPriorCharacters[c]--;
-    }
-    this->numOfPriorCharacters.erase(origin);
-}
-
-bool AlphabetFromDictionary::findNextOrigin(char &origin) {
-    for (auto it : this->numOfPriorCharacters) {
-        if (it.second == 0) {
-            origin = it.first;
-            return true;
-        }
-    }
-    // no origin -> circle in graph -> dictionary is inconsistent
-    return false;
-}
-
-bool AlphabetFromDictionary::topologicalSort(vector<char> &alphabet) {
-    alphabet.clear();
-    char nextChar;
-    while (this->numOfPriorCharacters.size() > 0) {
-        if (!this->findNextOrigin(nextChar)) {
-            alphabet.clear();
-            return false;
-        }
-        alphabet.push_back(nextChar);
-        this->updateNumOfPriorCharacters(nextChar);
-    }
-    return true;
-}
-
-void AlphabetFromDictionary::createCharPriorityGraph() {
-    if (this->dictionary.empty()) return;
-    int mismatchIndex;
-    for (int i = 0; i < this->dictionary.size()-1; i++)
-    {
-        mismatchIndex = findFirstMismatchIndex(this->dictionary[i], this->dictionary[i+1]);
-        if (mismatchIndex != -1) {
-            char priorChar = this->dictionary[i][mismatchIndex], followingChar = this->dictionary[i + 1][mismatchIndex];
-            this->charPriorityGraph[priorChar].insert(followingChar);
-            this->numOfPriorCharacters[followingChar]++;
+void AlphabetFromDictionary::findAlphabetCharacters() {
+    this->alphabetCharacters.clear();
+    vector<bool> isCharInDictionary(NUM_OF_NATIVE_CHARS, false);
+    for (auto word : this->dictionary) {
+        for (char c : word) {
+            if (!isCharInDictionary[c]) {
+                isCharInDictionary[c] = true;
+                this->alphabetCharacters.push_back(c);
+            }
         }
     }
 }
 
 int AlphabetFromDictionary::findFirstMismatchIndex(string str1, string str2) {
-    if (str1.size() == 0 || str2.size() == 0) {
-        return -1;
-    }
     int index = 0;
     while (index < str1.size() && index < str2.size() && str1[index] == str2[index])
         index++;
     return (index < str1.size() && index < str2.size()) ? index : -1;
 }
 
-vector<char> AlphabetFromDictionary::findAlphabetCharacters() {
-    vector<bool> charsInDict((unsigned int) pow(2, CHAR_BIT), false);
-    vector<char> alphabetChars;
-    for (auto word : this->dictionary) {
-        for (char c : word) {
-            if (!charsInDict[c]) {
-                charsInDict[c] = true;
-                alphabetChars.push_back(c);
-            }
+void AlphabetFromDictionary::createCharPriorityGraph() {
+    int mismatchIndex;
+    string lastNonEmptyWord;
+
+    // find first non-empty word in dictionary
+    for (string &word : this->dictionary) {
+        if (!word.empty()) {
+            lastNonEmptyWord = word;
+            break;
         }
     }
-    return alphabetChars;
+
+    for (string &word : this->dictionary) {
+        if (word.empty()) {
+            continue;
+        }
+        mismatchIndex = findFirstMismatchIndex(lastNonEmptyWord, word);
+        if (mismatchIndex != -1) {
+            char priorChar = lastNonEmptyWord[mismatchIndex], followingChar = word[mismatchIndex];
+            if (charPriorityGraph[followingChar][priorChar]) { // cycle in graph
+                this->isGraphCyclic = true;
+                this->orderedAlphabet = this->alphabetCharacters;
+                return;
+            }
+            this->charPriorityGraph[priorChar][followingChar] = true;
+        }
+        lastNonEmptyWord = word;
+    }
+}
+
+void AlphabetFromDictionary::topologicalSortUtil(char priorChar, vector<bool> &visited, stack<char> &stack) {
+    visited[priorChar] = true;
+    vector<bool> isCharAdjacent = this->charPriorityGraph[priorChar];
+
+    for (char c = 0; c < isCharAdjacent.size(); c++) {
+        if (isCharAdjacent[c] && !visited[c]) {
+            topologicalSortUtil(c, visited, stack);
+        }
+    }
+
+    stack.push(priorChar);
+}
+
+void AlphabetFromDictionary::topologicalSort() {
+    stack<char> stack;
+    vector<bool> visited(NUM_OF_NATIVE_CHARS, false);
+
+    for (auto it : this->charPriorityGraph) {
+        if (!visited[it.first]) {
+            this->topologicalSortUtil(it.first, visited, stack);
+        }
+    }
+
+    while (!stack.empty()) {
+        this->orderedAlphabet.push_back(stack.top());
+        stack.pop();
+    }
+}
+
+void AlphabetFromDictionary::findAlphabet() {
+    if (dictionary.empty()) {
+        return;
+    }
+
+    this->createCharPriorityGraph();
+    if (!this->isGraphCyclic) {
+        // find topological sort of characters graph to find ordered alphabet
+        this->topologicalSort();
+    }
 }
