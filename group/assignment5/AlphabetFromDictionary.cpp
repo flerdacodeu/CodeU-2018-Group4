@@ -31,7 +31,7 @@ void AlphabetFromDictionary::initializeClassVars() {
 void AlphabetFromDictionary::findAlphabetCharacters() {
     this->alphabetCharacters.clear();
     vector<bool> isCharInDictionary(NUM_OF_NATIVE_CHARS, false);
-    for (auto word : this->dictionary) {
+    for (string &word : this->dictionary) {
         for (char c : word) {
             if (!isCharInDictionary[c]) {
                 isCharInDictionary[c] = true;
@@ -41,7 +41,7 @@ void AlphabetFromDictionary::findAlphabetCharacters() {
     }
 }
 
-int AlphabetFromDictionary::findFirstMismatchIndex(string str1, string str2) {
+int AlphabetFromDictionary::findFirstMismatchIndex(const string &str1, const string &str2) {
     int index = 0;
     while (index < str1.size() && index < str2.size() && str1[index] == str2[index])
         index++;
