@@ -19,22 +19,28 @@ private:
     vector<char> orderedAlphabet;
     vector<char> alphabetCharacters;
     bool isGraphCyclic;
+    vector<int> inDegree;
 
 public:
     explicit AlphabetFromDictionary(const vector<string> &dictionary);;
     ~AlphabetFromDictionary() = default;
     void setDictionary(const vector<string> &dictionary);
     vector<char> getAlphabet();
+    vector<string> makeDictionaryConsistent();
     bool isDictionaryConsistent();
+    set<vector<char>> findAllAlphabets();
 
 private:
     void initializeClassVars();
     void findAlphabetCharacters();
     int findFirstMismatchIndex(const string &str1, const string &str2);
     void createCharPriorityGraph();
+    void findCyclesInGraph();
+    void findCyclesInGraphUtil(char priorChar, vector<bool> &visited);
     void topologicalSortUtil(char letter, vector<bool> &visited, stack<char> &stack);
     void topologicalSort();
     void findAlphabet();
+    void allTopologicalSortUtil(set<vector<char> > &allAlphabets, vector<char> &alphabet, vector<bool> &visited);
 };
 
 
