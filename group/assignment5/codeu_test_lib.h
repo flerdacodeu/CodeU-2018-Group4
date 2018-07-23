@@ -47,6 +47,22 @@ inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
     os << v[i];
   }
   os << "}";
+  return os;
+}
+
+// Print operator for sets. Must be defined in order to use EXPECT_EQ macro
+// with sets.
+template <class T>
+inline std::ostream& operator<<(std::ostream& os, const std::set<T>& s) {
+  os << "{";
+  for (auto it = s.begin(); it != s.end(); ++it)
+  {
+    if (it != s.begin())
+      os << ", "; 
+    os << *it;
+  }
+  os << "}";
+  return os;
 }
 
 // Example usage:
