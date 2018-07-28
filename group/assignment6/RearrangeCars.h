@@ -21,7 +21,7 @@ private:
 	int findEmptySlotId();
 	vector<int> findCarPositions(const vector<int> &currentStates);
 	int findMisplacedCar(const vector<int> &carPosition, const vector<int> &endStates);
-	void RearrangeCars::moveCar(vector<int> &currentStates, vector<int> &carPosition, int from, int to);
+	void moveCar(vector<int> &currentStates, vector<int> &carPosition, int from, int to);
 };
 
 #endif
