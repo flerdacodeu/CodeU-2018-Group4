@@ -15,8 +15,7 @@ int RearrangeCars::findEmptySlotId(){
 
 vector<int> RearrangeCars::findCarPositions(const vector<int> &currentStates){
 	vector<int> carPositions(currentStates.size() - 1);
-	for (int i = 0; i < currentStates.size(); i++)
-	{
+	for (int i = 0; i < currentStates.size(); i++){
 		if (currentStates[i] != -1) // check for empty slot
 			carPositions[currentStates[i]] = i;
 	}
@@ -39,18 +38,18 @@ void RearrangeCars::moveCar(vector<int> &currentStates, vector<int> &carPosition
 void RearrangeCars::generateSequenceOfMoves(const vector<int> &endStates, vector<Move> &sequenceOfMoves){
 	vector<int> currentStates = this->startStates; // startStates will remain unchanged
 	vector<int> carPosition = findCarPositions(currentStates);
-	
+
 	int emptySlotId = findEmptySlotId();
 	int currCarId, currCarSlotId;
-	
+
 	while (true){
 		currCarId = endStates[emptySlotId];
 		if (currCarId == -1) // We reached slot which should be empty in the end
 			currCarId = findMisplacedCar(carPosition, endStates);
-		if (currCarId == -1) break; 
+		if (currCarId == -1) break;
 		currCarSlotId = carPosition[currCarId];
 		moveCar(currentStates, carPosition, currCarSlotId, emptySlotId);
-		sequenceOfMoves.push_back(Move(currCarId, currCarSlotId, emptySlotId));
+		sequenceOfMoves.push_back(Move(currCarId, make_pair(currCarSlotId, emptySlotId)));
 		emptySlotId = currCarSlotId;
 	}
 }
