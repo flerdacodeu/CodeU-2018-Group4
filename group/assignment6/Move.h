@@ -5,14 +5,13 @@
 struct Move
 {
 	int carId;
-	int startPosition;
-	int endPosition;
+	std::pair<int, int> positions;
 
 	Move() {}
-	Move(int carId, int startPosition, int endPosition) : carId(carId), startPosition(startPosition), endPosition(endPosition){}
+	Move(int carId, std::pair<int, int> positions) : carId(carId), positions(positions){}
 
 	friend std::ostream& operator<<(std::ostream& os, const Move& move) {
-		os << "Move car #" << move.carId << " from space " << move.startPosition << " to " << move.endPosition << std::endl;
+		os << "Move car #" << move.carId << " from space " << move.positions.first << " to " << move.positions.second << std::endl;
 		return os;
 	}
 };
