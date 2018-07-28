@@ -12,7 +12,7 @@ void printSequence(vector<T> sequence){
 
 void TestRearrangeCars::testValidRearrangingOfCars() {
 	vector<int> startStates = { 0, 1, -1, 2 };
-	vector<int> endStates = {2, 0, 1, -1};
+	vector<int> endStates = { 2, 0, 1, -1 };
 	vector<Move> sequenceOfMoves;
 
 	RearrangeCars rearrangeCars(startStates);
@@ -20,11 +20,12 @@ void TestRearrangeCars::testValidRearrangingOfCars() {
 	printSequence(sequenceOfMoves);
 
 	for (Move &move : sequenceOfMoves){
-		EXPECT_EQ(move.carId, startStates[move.startPosition]);
-		EXPECT_EQ(-1, startStates[move.endPosition]);
+		EXPECT_EQ(move.carId, startStates[move.positions.first]);
+		EXPECT_EQ(-1, startStates[move.positions.second]);
 		// Make a move
-		startStates[move.endPosition] = move.carId;
-		startStates[move.startPosition] = -1;
+		startStates[move.positions.second] = move.carId;
+		startStates[move.positions.first] = -1;
 	}
 	EXPECT_EQ(endStates, startStates); // Check if following this moves gives valid endStates
 }
+
