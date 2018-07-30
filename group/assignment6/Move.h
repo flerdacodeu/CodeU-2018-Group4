@@ -1,17 +1,19 @@
 #ifndef MOVE_H
 #define MOVE_H
-#pragma once
 
-struct Move
-{
+#include <iostream>
+
+using namespace std;
+
+struct Move {
 	int carId;
-	std::pair<int, int> positions;
+	pair<int, int> positions;
 
 	Move() {}
-	Move(int carId, std::pair<int, int> positions) : carId(carId), positions(positions){}
+	Move(int carId, pair<int, int> positions) : carId(carId), positions(positions) {}
 
-	friend std::ostream& operator<<(std::ostream& os, const Move& move) {
-		os << "Move car #" << move.carId << " from space " << move.positions.first << " to " << move.positions.second << std::endl;
+	friend ostream& operator<<(ostream& os, const Move& move) {
+		os << "Move car #" << move.carId << " from space " << move.positions.first << " to " << move.positions.second << endl;
 		return os;
 	}
 };
