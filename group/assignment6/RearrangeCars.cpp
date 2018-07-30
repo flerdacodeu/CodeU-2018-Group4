@@ -108,10 +108,10 @@ int RearrangeCars::findMisplacedCarWithConstraints(vector<int> &carPosition, vec
 }
 
 int RearrangeCars::numberOfCarsOnDesiredPosition(const vector<int>& carPosition, const vector<int>& endStates) {
-	int num = 0;
+	int count = 0;
 	for (int i = 0; i < carPosition.size(); i++)
 		if (endStates[carPosition[i]] == i)
-			num++;
+			count++;
 
 	return num;
 }
