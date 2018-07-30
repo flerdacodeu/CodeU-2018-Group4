@@ -113,7 +113,7 @@ int RearrangeCars::numberOfCarsOnDesiredPosition(const vector<int>& carPosition,
 		if (endStates[carPosition[i]] == i)
 			count++;
 
-	return num;
+	return count;
 }
 
 void RearrangeCars::generateSequenceOfMovesWithConstraints(const vector<int> &endStates, vector<Move> &sequenceOfMoves, const vector<set<int>> &constraints) {
