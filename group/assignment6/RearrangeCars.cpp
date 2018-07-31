@@ -58,7 +58,7 @@ bool RearrangeCars::validMove(int carId, int emptySlotId, const vector<set<int>>
 	if (constrains[emptySlotId].size() == 0)	// There are no constraints for this parking space, any car can be moved here
 		return true;
 
-	if ((constrains[emptySlotId]).find(carId) != (constrains[emptySlotId].end()))
+	if ((constrains[emptySlotId]).find(carId) == (constrains[emptySlotId].end()))
 		return true;
 
 	return false;
