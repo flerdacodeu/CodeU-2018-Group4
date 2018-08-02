@@ -1,3 +1,6 @@
+#ifndef TESTLIB_H
+#define TESTLIB_H
+
 #include <iostream>
 #include <vector>
 
@@ -39,13 +42,15 @@
 // with vectors (see example below).
 template <class T>
 inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
-  os << "{";
-  for (int i = 0; i < v.size(); i++) {
-    if (i > 0) {
-      os << ", ";
-    }
-    os << v[i];
-  }
-  os << "}";
-  return os;
+	os << "{";
+	for (int i = 0; i < v.size(); i++) {
+		if (i > 0) {
+			os << ", ";
+		}
+		os << v[i];
+	}
+	os << "}";
+	return os;
 }
+
+#endif
