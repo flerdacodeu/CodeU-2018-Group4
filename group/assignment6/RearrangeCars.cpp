@@ -8,17 +8,20 @@ void RearrangeCars::setStartStates(const vector<int> &startStates) {
 
 int RearrangeCars::findEmptySlotId() {
 	for (int slotId = 0; slotId < this->startStates.size(); slotId++) {
-		if (this->startStates[slotId] == -1) return slotId; // no car has -1 id, it is reserved for empty slot
+		if (this->startStates[slotId] == -1) 
+			return slotId;		// no car has -1 id, it is reserved for empty slot
 	}
-	return -1; // This code should not be reached
+
+	return -1;	// This code should not be reached
 }
 
 vector<int> RearrangeCars::findCarPositions(const vector<int> &currentStates) {
 	vector<int> carPositions(currentStates.size() - 1);
 	for (int i = 0; i < currentStates.size(); i++) {
-		if (currentStates[i] != -1) // check for empty slot
+		if (currentStates[i] != -1)		// check for empty slot
 			carPositions[currentStates[i]] = i;
 	}
+
 	return carPositions;
 }
 
@@ -60,20 +63,20 @@ int RearrangeCars::findMisplacedCar(vector<int> &carPosition, vector<int> &curre
 			return currCarSlotId;
 		}
 
-		// Find a displaced car that can be moved here
-		bool foundDisplacedCar = false;
+		// Find a misplaced car that can be moved here
+		bool foundMisplacedCar = false;
 		for (int carId = 0; carId < carPosition.size(); carId++) {
 			if (lastMovedCarId != carId && endStates[carPosition[carId]] != carId && validMove(carId, emptySlotId, constraints)) {
 				currCarSlotId = carPosition[carId];
 				lastMovedCarId = carId;
 
-				foundDisplacedCar = true;
+				foundMisplacedCar = true;
 				break;
 			}
 		}
 
-		// If displaced car can't be moved to free slot, move a car that is on its position and can be moved here
-		if (!foundDisplacedCar) {
+		// If misplaced car can't be moved to free slot, move a car that is on its position and can be moved here
+		if (!foundMisplacedCar) {
 			for (int carId = 0; carId < carPosition.size(); carId++) {
 				if (validMove(carId, emptySlotId, constraints)) {
 					currCarSlotId = carPosition[carId];
