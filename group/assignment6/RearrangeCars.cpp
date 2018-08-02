@@ -139,3 +139,34 @@ void RearrangeCars::generateSequenceOfMovesWithConstraints(const vector<int> &en
 			break;
 	}
 }
+
+void RearrangeCars::bruteForceAllSequence(vector<int>& currentStates, const vector<int>& endStates, const vector<set<int>> &constraints, vector<int>& carPosition, int emptySlotId, vector<Move>& sequenceOfMoves, vector<vector<Move>>& sequencesOfMoves, set<vector<int>>& usedPositions) {
+	int numOfCarsOnDisiredPosition = numberOfCarsOnDesiredPosition(carPosition, endStates);
+	if (numOfCarsOnDisiredPosition == carPosition.size()) {
+		sequencesOfMoves.push_back(sequenceOfMoves);
+		return;
+	}
+	for (int currCarSlotId = 0; currCarSlotId < currentStates.size(); currCarSlotId++) {
+		if (currCarSlotId != emptySlotId && validMove(currentStates[currCarSlotId], emptySlotId, constraints)) {
+			moveCar(currentStates, carPosition, currCarSlotId, emptySlotId); // we swap car on our currCarSlotId and now this car on emptySlotId position
+			if (usedPositions.find(carPosition) == usedPositions.end()) {
+				usedPositions.insert(carPosition);
+				sequenceOfMoves.push_back(Move(currentStates[emptySlotId], make_pair(currCarSlotId, emptySlotId)));
+				bruteForceAllSequence(currentStates, endStates, carPosition, currCarSlotId, sequenceOfMoves, sequencesOfMoves, usedPositions);
+				sequenceOfMoves.pop_back();
+				usedPositions.erase(usedPositions.find(carPosition));
+			}
+			moveCar(currentStates, carPosition, emptySlotId, currCarslotId); // we want to swap again and return to our currentStates for next try
+		}
+	}	
+}
+
+void RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endStates, const vector<set<int>> &constraints, vector<vector<Move>> &sequencesOfMoves) {
+	vector<int> currentStates = this->startStates;
+	vector<int> carPosition = findCarPositions(currentStates);
+
+	int emptySlotId = findEmptySlotId();
+	vector<Move> sequenceOfMoves;
+	set<vector<int>> usedPositions;
+	bruteForceAllSequence(currentStates, endStates, constraints, carPosition, emptySlotId, sequenceOfMoves, sequencesOfMoves, usedPositions);
+}

@@ -19,6 +19,7 @@ public:
 	void setStartStates(const vector<int> &startStates);
 	void generateSequenceOfMoves(const vector<int> &endStates, vector<Move> &sequenceOfMoves);
 	void generateSequenceOfMovesWithConstraints(const vector<int> &endStates, vector<Move> &sequenceOfMoves, const vector<set<int>> &constraints);
+	void generateAllSequencesOfMoves(const vector<int> &endStates, const vector<set<int>> &constraints, vector<vector<Move>> &sequencesOfMoves);
 
 private:
 	int findEmptySlotId();
@@ -28,6 +29,7 @@ private:
 	void moveCar(vector<int> &currentStates, vector<int> &carPosition, int from, int to);
 	bool validMove(int carId, int emptySlot, const vector<set<int>>& constrains);
 	int numberOfCarsOnDesiredPosition(const vector<int>& carPosition, const vector<int>& endPosition);
+	void bruteForceAllSequence(vector<int>& currentStates, const vector<int>& endStates, const vector<set<int>> &constraints, vector<int>& carPosition, int emptySlotId, vector<Move>& sequenceOfMoves, vector<vector<Move>>& sequencesOfMoves, set<vector<int>>& usedPositions);
 };
 
 #endif
