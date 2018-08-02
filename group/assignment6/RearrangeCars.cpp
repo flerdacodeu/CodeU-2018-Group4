@@ -44,7 +44,7 @@ bool RearrangeCars::validMove(int carId, int emptySlotId, const vector<set<int>>
 	return false;
 }
 
-int RearrangeCars::numberOfCarsOnDesiredPosition(const vector<int>& carPosition, const vector<int>& endStates) {
+int RearrangeCars::numberOfCarsOnTheirDesiredPositions (const vector<int>& carPosition, const vector<int>& endStates) {
 	int count = 0;
 	for (int i = 0; i < carPosition.size(); i++)
 		if (endStates[carPosition[i]] == i)
@@ -102,7 +102,7 @@ void RearrangeCars::generateSequenceOfMoves(const vector<int> &endStates, vector
 
 	int emptySlotId = findEmptySlotId();
 	int currCarId, currCarSlotId;
-	int numOfCarsOnDisiredPosition = numberOfCarsOnDesiredPosition(carPosition, endStates);
+	int numOfCarsOnDisiredPosition = numberOfCarsOnTheirDesiredPositions (carPosition, endStates);
 
 	while (true) {
 		currCarId = endStates[emptySlotId];
@@ -121,7 +121,7 @@ void RearrangeCars::generateSequenceOfMoves(const vector<int> &endStates, vector
 }
 
 void RearrangeCars::bruteForceAllSequence(vector<int>& currentStates, const vector<int>& endStates, vector<int>& carPosition, int emptySlotId, vector<Move>& sequenceOfMoves, vector<vector<Move>>& sequencesOfMoves, set<vector<int>>& usedPositions, const vector<set<int>> *constraints) {
-	int numOfCarsOnDisiredPosition = numberOfCarsOnDesiredPosition(carPosition, endStates);
+	int numOfCarsOnDisiredPosition = numberOfCarsOnTheirDesiredPositions (carPosition, endStates);
 	if (numOfCarsOnDisiredPosition == carPosition.size()) {
 		sequencesOfMoves.push_back(sequenceOfMoves);
 		return;
