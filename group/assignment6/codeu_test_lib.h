@@ -38,8 +38,7 @@
               << ") is not null, expected null." << std::endl; \
   }
 
-// Print operator for vectors. Must be defined in order to use EXPECT_EQ macro
-// with vectors (see example below).
+// Print operator for vectors..
 template <class T>
 inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
 	os << "{";
@@ -50,6 +49,7 @@ inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
 		os << v[i];
 	}
 	os << "}";
+	
 	return os;
 }
 
