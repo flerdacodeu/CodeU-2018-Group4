@@ -38,7 +38,7 @@
               << ") is not null, expected null." << std::endl; \
   }
 
-// Print operator for vectors..
+// Print operator for vectors.
 template <class T>
 inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
 	os << "{";
