@@ -1,3 +1,6 @@
+#ifndef TESTLIB_H
+#define TESTLIB_H
+
 #include <iostream>
 #include <vector>
 
@@ -35,17 +38,19 @@
               << ") is not null, expected null." << std::endl; \
   }
 
-// Print operator for vectors. Must be defined in order to use EXPECT_EQ macro
-// with vectors (see example below).
+// Print operator for vectors.
 template <class T>
 inline std::ostream& operator<<(std::ostream& os, const std::vector<T>& v) {
-  os << "{";
-  for (int i = 0; i < v.size(); i++) {
-    if (i > 0) {
-      os << ", ";
-    }
-    os << v[i];
-  }
-  os << "}";
-  return os;
+	os << "{";
+	for (int i = 0; i < v.size(); i++) {
+		if (i > 0) {
+			os << ", ";
+		}
+		os << v[i];
+	}
+	os << "}";
+	
+	return os;
 }
+
+#endif
