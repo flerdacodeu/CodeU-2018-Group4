@@ -17,19 +17,18 @@ public:
 	RearrangeCars(const vector<int> &startStates);
 	~RearrangeCars() = default;
 	void setStartStates(const vector<int> &startStates);
-	void generateSequenceOfMoves(const vector<int> &endStates, vector<Move> &sequenceOfMoves);
-	void generateSequenceOfMovesWithConstraints(const vector<int> &endStates, vector<Move> &sequenceOfMoves, const vector<set<int>> &constraints);
-	void generateAllSequencesOfMoves(const vector<int> &endStates, const vector<set<int>> &constraints, vector<vector<Move>> &sequencesOfMoves);
+	void generateSequenceOfMoves(const vector<int> &endStates, vector<Move> &sequenceOfMoves, const vector<set<int>> *constraints = nullptr);
+	void generateAllSequencesOfMoves(const vector<int> &endStates, vector<vector<Move>> &sequencesOfMoves, const vector<set<int>> *constraints = nullptr);
 
 private:
 	int findEmptySlotId();
 	vector<int> findCarPositions(const vector<int> &currentStates);
-	int findMisplacedCar(const vector<int> &carPosition, const vector<int> &endStates);
-	int findMisplacedCarWithConstraints(vector<int> &carPosition, vector<int> &currentStates, const vector<int> &endStates, const vector<set<int>> &constraints, vector<Move> &sequenceOfMoves, int &emptySlotId, int &numOfCarsOnDisiredPosition);
+	int findMisplacedCar(vector<int> &carPosition, vector<int> &currentStates, const vector<int> &endStates, const vector<set<int>> *constraints, vector<Move> &sequenceOfMoves, int &emptySlotId, int &numOfCarsOnDisiredPosition);
 	void moveCar(vector<int> &currentStates, vector<int> &carPosition, int from, int to);
-	bool validMove(int carId, int emptySlot, const vector<set<int>>& constrains);
-	int numberOfCarsOnDesiredPosition(const vector<int>& carPosition, const vector<int>& endPosition);
-	void bruteForceAllSequence(vector<int>& currentStates, const vector<int>& endStates, const vector<set<int>> &constraints, vector<int>& carPosition, int emptySlotId, vector<Move>& sequenceOfMoves, vector<vector<Move>>& sequencesOfMoves, set<vector<int>>& usedPositions);
+	bool validMove(int carId, int emptySlot, const vector<set<int>> *constrains);
+	int numberOfCarsOnDesiredPosition(const vector<int> &carPosition, const vector<int> &endPosition);
+	void bruteForceAllSequence(vector<int> &currentStates, const vector<int> &endStates, vector<int> &carPosition, int emptySlotId, vector<Move> &sequenceOfMoves, vector<vector<Move>> &sequencesOfMoves, set<vector<int>> &usedPositions, const vector<set<int>> *constraints = nullptr);
+
 };
 
 #endif
