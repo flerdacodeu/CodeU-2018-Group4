@@ -149,8 +149,7 @@ RearrangeCars::bruteForceAllSequence(vector<int> &currentStates, const vector<in
 
                   if (usedPositions.find(carPosition) == usedPositions.end()) {
                         usedPositions.insert(carPosition);
-                        sequenceOfMoves.push_back(
-                                Move(currentStates[emptySlotId], make_pair(currCarSlotId, emptySlotId)));
+                        sequenceOfMoves.push_back(Move(currentStates[emptySlotId], make_pair(currCarSlotId, emptySlotId)));
                         bruteForceAllSequence(currentStates, endStates, carPosition, currCarSlotId,
                                               sequenceOfMoves, sequencesOfMoves, usedPositions, constraints);
                         sequenceOfMoves.pop_back();
@@ -175,17 +174,17 @@ bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endStates, ve
       int emptySlotId = findEmptySlotId();
       vector<Move> sequenceOfMoves;
       set<vector<int>> usedPositions;
+      usedPositions.insert(carPosition);
       bruteForceAllSequence(currentStates, endStates, carPosition, emptySlotId, sequenceOfMoves, sequencesOfMoves,
                             usedPositions, constraints);
       return true;
 }
 
-bool RearrangeCars::isInputValid(const vector<int> &states, bool endStates = false,
-                                 const vector<set<int>> *constraints = nullptr) {
+bool RearrangeCars::isInputValid(const vector<int> &states, bool endStates, const vector<set<int>> *constraints) {
       if (states.empty()) {
             return false;
       }
-      
+
       // make sure startStates and endStates have same size
       if (endStates && this->startStates.size() != states.size()) {
             return false;
