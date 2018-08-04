@@ -181,7 +181,7 @@ bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endStates, ve
 }
 
 bool RearrangeCars::isInputValid(const vector<int> &endStates, const vector<set<int>> *constraints) {
-      bool atLeastOneCar = !endStates.size() >= 2 && !this->startStates.size() >= 2;
+      bool atLeastOneCar = endStates.size() >= 2 && this->startStates.size() >= 2;
       bool stateVectorsHaveSameSize = endStates.size() == this->startStates.size();
       bool startStatesValid = isInputValidAux(this->startStates, constraints);
       bool endStatesValid = isInputValidAux(endStates, constraints);
