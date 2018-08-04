@@ -77,9 +77,9 @@ void TestRearrangeCars::runAllTests() {
 	testNumberOfStatesMismatch(); 
 	testEmptyInput(); 
 	testEmptyInputWithInvalidConstraints();
-	//testNonEmptyOneSlot();
-	//testValidOneSlot();
-	//testValidOneSlotWithInvalidConstraints();
+	testNonEmptyOneSlot();
+	testValidOneSlot();
+	testValidOneSlotWithInvalidConstraints();
 	testValidStatesWithEmptyConstraints();
 	testValidStatesWithInvalidConstraints1();
 	testValidStatesWithInvalidConstraints2();
@@ -164,7 +164,7 @@ void TestRearrangeCars::testValidOneSlot() {
 	vector<int> endStates = { -1 };
 	vector<set<int>> constraints = { {} };
 	
-	testValidInput(startStates, endStates, constraints);
+	testInvalidInput(startStates, endStates, constraints);
 }
 
 void TestRearrangeCars::testValidOneSlotWithInvalidConstraints() {
