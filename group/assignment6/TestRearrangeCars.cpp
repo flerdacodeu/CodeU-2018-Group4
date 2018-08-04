@@ -19,10 +19,13 @@ void printAllSequences(vector<vector<T>> allSequences) {
 
 void testInvalidInput (const vector<int> &startStates, const vector<int> &endStates, const vector<set<int>> &constraints) {
     vector<Move> sequenceOfMoves;
+    vector<vector<Move>> allSequencesOfMoves;
     
     RearrangeCars rearrangeCars(startStates);
-	rearrangeCars.generateSequenceOfMoves(endStates, sequenceOfMoves, &constraints);
+ 	EXPECT_EQ(false, rearrangeCars.generateSequenceOfMoves(endStates, sequenceOfMoves, &constraints));
 	EXPECT_EQ(0, sequenceOfMoves.size());
+	EXPECT_EQ(false, rearrangeCars.generateAllSequencesOfMoves(endStates, allSequencesOfMoves, &constraints));
+	EXPECT_EQ(0, allSequencesOfMoves.size());
 }
 
 void testValidInput (const vector<int> &startStates, const vector<int> &endStates, const vector<set<int>> &constraints, bool printResult = false) {
@@ -30,7 +33,7 @@ void testValidInput (const vector<int> &startStates, const vector<int> &endState
     vector<int> curStates(startStates); 
      
 	RearrangeCars rearrangeCars(startStates);
-	rearrangeCars.generateSequenceOfMoves(endStates, sequenceOfMoves, &constraints);
+	EXPECT_EQ(true, rearrangeCars.generateSequenceOfMoves(endStates, sequenceOfMoves, &constraints));
 	if (printResult)
 	    printSequence(sequenceOfMoves);
 	    
@@ -50,7 +53,7 @@ void testValidInputAllSequences (const vector<int> &startStates, const vector<in
     vector<vector<Move>> allSequencesOfMoves;
     
     RearrangeCars rearrangeCars(startStates);
-	rearrangeCars.generateAllSequencesOfMoves(endStates, allSequencesOfMoves);
+	EXPECT_EQ(true, rearrangeCars.generateAllSequencesOfMoves(endStates, allSequencesOfMoves));
 	if (printResult)
 	    printAllSequences(allSequencesOfMoves);
 	
@@ -67,22 +70,22 @@ void testValidInputAllSequences (const vector<int> &startStates, const vector<in
 }
 
 void TestRearrangeCars::runAllTests() {
-	//testDuplicateInStartStates(); 
-	//testDuplicateInEndStates(); 
-	//testMultpleEmptySlotsInStartStates(); 
-	//testMultpleEmptySlotsInEndStates(); 
-	//testNumberOfStatesMismatch(); 
-	//testEmptyInput(); 
-	//testEmptyInputWithInvalidConstraints();
+	testDuplicateInStartStates(); 
+	testDuplicateInEndStates(); 
+	testMultpleEmptySlotsInStartStates(); 
+	testMultpleEmptySlotsInEndStates(); 
+	testNumberOfStatesMismatch(); 
+	testEmptyInput(); 
+	testEmptyInputWithInvalidConstraints();
 	//testNonEmptyOneSlot();
 	//testValidOneSlot();
 	//testValidOneSlotWithInvalidConstraints();
-	//testValidStatesWithEmptyConstraints();
-	//testValidStatesWithInvalidConstraints1();
-	//testValidStatesWithInvalidConstraints2();
-	//testValidStatesWithInvalidConstraints3();
-	//testValidStatesWithImpossibleConstraints1();
-	//testValidStatesWithImpossibleConstraints2();
+	testValidStatesWithEmptyConstraints();
+	testValidStatesWithInvalidConstraints1();
+	testValidStatesWithInvalidConstraints2();
+	testValidStatesWithInvalidConstraints3();
+	testValidStatesWithImpossibleConstraints1();
+	testValidStatesWithImpossibleConstraints2();
 	testValidStates1();
 	testValidStates2();
 	testValidStates3();
