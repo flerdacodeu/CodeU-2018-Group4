@@ -181,12 +181,12 @@ bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endStates, ve
 }
 
 bool RearrangeCars::isInputValid(const vector<int> &endStates, const vector<set<int>> *constraints) {
-      bool stateVectorsNotEmpty = !endStates.empty() && !this->startStates.empty();
+      bool atLeastOneCar = !endStates.size() >= 2 && !this->startStates.size() >= 2;
       bool stateVectorsHaveSameSize = endStates.size() == this->startStates.size();
       bool startStatesValid = isInputValidAux(this->startStates, constraints);
       bool endStatesValid = isInputValidAux(endStates, constraints);
 
-      return stateVectorsNotEmpty && stateVectorsHaveSameSize && startStatesValid && endStatesValid;
+      return atLeastOneCar && stateVectorsHaveSameSize && startStatesValid && endStatesValid;
 }
 
 bool RearrangeCars::isInputValidAux(const vector<int> &states, const vector<set<int>> *constraints) {
@@ -195,7 +195,7 @@ bool RearrangeCars::isInputValidAux(const vector<int> &states, const vector<set<
       for (int slotId = 0; slotId < states.size(); slotId++) {
             int carId = states[slotId];
 
-            // make sure there is exactly one empty slot
+            // make sure there is not more than one empty slot
             if (carId == EMPTY_SLOT_ID) {
                   if (foundEmptySlot) {
                         return false;
@@ -215,5 +215,7 @@ bool RearrangeCars::isInputValidAux(const vector<int> &states, const vector<set<
                   return false;
             }
       }
-      return true;
+
+      // make sure there is an empty slot
+      return foundEmptySlot;
 }
