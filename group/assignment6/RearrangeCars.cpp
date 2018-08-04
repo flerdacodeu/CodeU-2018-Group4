@@ -31,15 +31,14 @@ void RearrangeCars::moveCar(vector<int> &currentStates, vector<int> &carPosition
       carPosition[currentStates[to]] = to;
 }
 
-bool RearrangeCars::validMove(int carId, int emptySlotId, const vector<set<int>> *constrains) {
-      if (!constrains)        // Constrains are not set
+bool RearrangeCars::validMove(int carId, int emptySlotId, const vector<set<int>> *constraints) {
+      if (!constraints)        // Constraints are not set
             return true;
 
-      if (constrains[emptySlotId].size() ==
-          0)        // There are no constraints for this parking space, any car can be moved here
+      if (constraints[emptySlotId].empty()) // There are no constraints for this parking space, any car can be moved here
             return true;
 
-      if (((*constrains)[emptySlotId]).find(carId) == ((*constrains)[emptySlotId].end()))
+      if (((*constraints)[emptySlotId]).find(carId) == ((*constraints)[emptySlotId].end()))
             return true;
 
       return false;
@@ -149,7 +148,8 @@ RearrangeCars::bruteForceAllSequence(vector<int> &currentStates, const vector<in
 
                   if (usedPositions.find(carPosition) == usedPositions.end()) {
                         usedPositions.insert(carPosition);
-                        sequenceOfMoves.push_back(Move(currentStates[emptySlotId], make_pair(currCarSlotId, emptySlotId)));
+                        sequenceOfMoves.push_back(
+                              Move(currentStates[emptySlotId], make_pair(currCarSlotId, emptySlotId)));
                         bruteForceAllSequence(currentStates, endStates, carPosition, currCarSlotId,
                                               sequenceOfMoves, sequencesOfMoves, usedPositions, constraints);
                         sequenceOfMoves.pop_back();
