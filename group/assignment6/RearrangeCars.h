@@ -27,8 +27,8 @@ private:
 	bool validMove(int carId, int emptySlot, const vector<set<int>> *constraints);
 	int numberOfCarsOnTheirDesiredPositions(const vector<int> &carPosition, const vector<int> &endPosition);
 	void getAllSequencesFromCurrentPosition(vector<int> &currentSlot2CarId, const vector<int> &endSlot2CarId, vector<int> &carPosition, int emptySlotId, vector<Move> &sequenceOfMoves, vector<vector<Move>> &allSequencesOfMovess, set<vector<int>> &usedPositions, const vector<set<int>> *constraints = nullptr);
-	bool isInputValid(const vector<int> &endStates, const vector<set<int>> *constraints);
-	bool isInputValidAux(const vector<int> &states, const vector<set<int>> *constraints);
+	bool isInputValid(const vector<int> &endSlot2CarId, const vector<set<int>> *constraints);
+	bool isInputValidAux(const vector<int> &slot2CarId, const vector<set<int>> *constraints);
 };
 
 #endif
