@@ -19,7 +19,7 @@ int RearrangeCars::findEmptySlotId() {
 vector<int> RearrangeCars::findCarPositions(const vector<int> &currentSlot2CarId) {
 	vector<int> carPositions(currentSlot2CarId.size() - 1);
 	for (int i = 0; i < currentSlot2CarId.size(); i++) {
-		if (currentSlot2CarId[i] != EMPTY_SLOT_ID) {  // Check for empty slot.
+		if (currentSlot2CarId[i] != EMPTY_SLOT_ID) {  // Check for an empty slot.
 			carPositions[currentSlot2CarId[i]] = i;
 		}	
 	}
@@ -141,11 +141,10 @@ bool RearrangeCars::generateSequenceOfMoves(const vector<int> &endSlot2CarId, ve
 	return true;
 }
 
-void
-RearrangeCars::getAllSequencesFromCurrentPosition(vector<int> &currentSlot2CarId, const vector<int> &endSlot2CarId, vector<int> &carPositions,
-				      int emptySlotId, vector<Move> &sequenceOfMoves,
-			              vector<vector<Move>> &allSequencesOfMoves, set<vector<int>> &usedPositions,
-				      const vector<set<int>> *constraints) {
+void RearrangeCars::getAllSequencesFromCurrentPosition(vector<int> &currentSlot2CarId, const vector<int> &endSlot2CarId, vector<int> &carPositions,
+				      			int emptySlotId, vector<Move> &sequenceOfMoves,
+			              			vector<vector<Move>> &allSequencesOfMoves, set<vector<int>> &usedPositions,
+				      			const vector<set<int>> *constraints) {
 	int numOfCarsOnDesiredPositions = numberOfCarsOnTheirDesiredPositions(carPositions, endSlot2CarId);
 
 	if (numOfCarsOnDesiredPositions == carPositions.size()) {
@@ -156,7 +155,7 @@ RearrangeCars::getAllSequencesFromCurrentPosition(vector<int> &currentSlot2CarId
 	for (int currCarSlotId = 0; currCarSlotId < currentSlot2CarId.size(); currCarSlotId++) {
 		if (currCarSlotId != emptySlotId && validMove(currentSlot2CarId[currCarSlotId], emptySlotId, constraints)) {
 
-			// We swap car on our currCarSlotId and now this car on emptySlotId position.
+			// We swap car on our currCarSlotId and now this car is on an emptySlotId position.
 			moveCar(currentSlot2CarId, carPositions, currCarSlotId, emptySlotId);
 
 			if (usedPositions.find(carPositions) == usedPositions.end()) {
@@ -191,18 +190,21 @@ bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endSlot2CarId
 	usedPositions.insert(carPosition);
 	getAllSequencesFromCurrentPosition(currentSlot2CarId, endSlot2CarId, carPosition, emptySlotId, sequenceOfMoves, allSequencesOfMoves, usedPositions, constraints);
 	
-    return true;
+    	return true;
 }
 
 bool RearrangeCars::isInputValid(const vector<int> &endSlot2CarId, const vector<set<int>> *constraints) {
 	bool atLeastOneCar = endSlot2CarId.size() >= 2 && this->startSlot2CarId.size() >= 2;
 	bool slot2CarIdVectorsHaveSameSize = endSlot2CarId.size() == this->startSlot2CarId.size();
 	bool constraintsSizeIsValid = constraints ? (constraints->size() == this->startSlot2CarId.size()) : true;  // Constraints should be either empty or have equal to number of slots size.
+	
 	if (!(atLeastOneCar && slot2CarIdVectorsHaveSameSize && constraintsSizeIsValid)) {
 	    return false;
 	}
+	
 	bool startSlot2CarIdValid = isInputValidAux(this->startSlot2CarId, constraints);
 	bool endSlot2CarIdValid = isInputValidAux(endSlot2CarId, constraints);
+	
 	return startSlot2CarIdValid && endSlot2CarIdValid;
 }
 
