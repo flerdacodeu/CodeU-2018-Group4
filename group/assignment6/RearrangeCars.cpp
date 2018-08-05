@@ -197,18 +197,20 @@ bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endSlot2CarId
 bool RearrangeCars::isInputValid(const vector<int> &endSlot2CarId, const vector<set<int>> *constraints) {
 	bool atLeastOneCar = endSlot2CarId.size() >= 2 && this->startSlot2CarId.size() >= 2;
 	bool slot2CarIdVectorsHaveSameSize = endSlot2CarId.size() == this->startSlot2CarId.size();
-	bool constraintsSizeIsValid = constraints ? constraints->size() == this->startSlot2CarId.size() : true;  // Constraints should be either empty or have equal to number of slots size.
+	bool constraintsSizeIsValid = constraints ? (constraints->size() == this->startSlot2CarId.size()) : true;  // Constraints should be either empty or have equal to number of slots size.
+	if (!(atLeastOneCar && slot2CarIdVectorsHaveSameSize && constraintsSizeIsValid)) {
+	    return false;
+	}
 	bool startSlot2CarIdValid = isInputValidAux(this->startSlot2CarId, constraints);
 	bool endSlot2CarIdValid = isInputValidAux(endSlot2CarId, constraints);
-
-	return atLeastOneCar && slot2CarIdVectorsHaveSameSize && constraintsSizeIsValid && startSlot2CarIdValid && endSlot2CarIdValid;
+	return startSlot2CarIdValid && endSlot2CarIdValid;
 }
 
-bool RearrangeCars::isInputValidAux(const vector<int> &Slot2CarId, const vector<set<int>> *constraints) {
+bool RearrangeCars::isInputValidAux(const vector<int> &slot2CarId, const vector<set<int>> *constraints) {
 	bool foundEmptySlot = false;
 	set<int> carIdHistogram;
-	for (int slotId = 0; slotId < Slot2CarId.size(); slotId++) {
-		int carId = Slot2CarId[slotId];
+	for (int slotId = 0; slotId < slot2CarId.size(); slotId++) {
+		int carId = slot2CarId[slotId];
 
 		// Make sure there is no more than one empty slot.
 		if (carId == EMPTY_SLOT_ID) {
