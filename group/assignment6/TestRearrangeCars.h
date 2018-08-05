@@ -8,29 +8,30 @@ class TestRearrangeCars {
 public:
     void runAllTests();
 private:
-    void testDuplicateInStartStates(); 
-    void testDuplicateInEndStates(); 
-    void testMultpleEmptySlotsInStartStates(); 
-    void testMultpleEmptySlotsInEndStates(); 
-    void testNumberOfStatesMismatch(); 
+    void testDuplicateInStartSlot2CarId(); 
+    void testDuplicateInEndSlot2CarId(); 
+    void testMultpleEmptySlotsInStartSlot2CarId(); 
+    void testMultpleEmptySlotsInEndSlot2CarId(); 
+    void testNumberOfSlot2CarIdMismatch(); 
     void testEmptyInput(); 
     void testEmptyInputWithInvalidConstraints(); 
     void testNonEmptyOneSlot();
     void testValidOneSlot();
     void testValidOneSlotWithInvalidConstraints();
-    void testValidStatesWithEmptyConstraints();
-    void testValidStatesWithInvalidConstraints1();
-    void testValidStatesWithInvalidConstraints2();
-    void testValidStatesWithInvalidConstraints3();
-    void testValidStatesWithImpossibleConstraints1();
-    void testValidStatesWithImpossibleConstraints2();
-    void testValidStates1();
-    void testValidStates2();
-    void testValidStates3();
-    void testValidStatesAllSequences1();
-    void testValidStatesAllSequences2();
-    void testValidStatesAllSequences3();
-    void testValidStatesAllSequences4();
+    void testValidSlot2CarIdWithEmptyConstraints();
+    void testValidSlot2CarIdWithInvalidConstraints1();
+    void testValidSlot2CarIdWithInvalidConstraints2();
+    void testValidSlot2CarIdWithInvalidConstraints3();
+    void testValidSlot2CarIdWithInvalidConstraints4();
+    void testValidSlot2CarIdWithImpossibleConstraints1();
+    void testValidSlot2CarIdWithImpossibleConstraints2();
+    void testValidSlot2CarId1();
+    void testValidSlot2CarId2();
+    void testValidSlot2CarId3();
+    void testValidSlot2CarIdAllSequences1();
+    void testValidSlot2CarIdAllSequences2();
+    void testValidSlot2CarIdAllSequences3();
+    void testValidSlot2CarIdAllSequences4();
 };
 
 #endif
