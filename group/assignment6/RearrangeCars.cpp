@@ -8,8 +8,9 @@ void RearrangeCars::setStartStates(const vector<int> &startStates) {
 
 int RearrangeCars::findEmptySlotId() {
 	for (int slotId = 0; slotId < this->startStates.size(); slotId++) {
-		if (this->startStates[slotId] == EMPTY_SLOT_ID)
+		if (this->startStates[slotId] == EMPTY_SLOT_ID) {
 			return slotId;  // No car has EMPTY_SLOT_ID id, it is reserved for empty slot.
+		}	
 	}
 
 	return -1;  // This code should not be reached.
@@ -18,8 +19,9 @@ int RearrangeCars::findEmptySlotId() {
 vector<int> RearrangeCars::findCarPositions(const vector<int> &currentStates) {
 	vector<int> carPositions(currentStates.size() - 1);
 	for (int i = 0; i < currentStates.size(); i++) {
-		if (currentStates[i] != EMPTY_SLOT_ID)  // Check for empty slot.
+		if (currentStates[i] != EMPTY_SLOT_ID) {  // Check for empty slot.
 			carPositions[currentStates[i]] = i;
+		}	
 	}
 
 	return carPositions;
@@ -32,23 +34,28 @@ void RearrangeCars::moveCar(vector<int> &currentStates, vector<int> &carPosition
 }
 
 bool RearrangeCars::validMove(int carId, int emptySlotId, const vector<set<int>> *constraints) {
-	if (!constraints)  // Constraints are not set.
+	if (!constraints) {  // Constraints are not set.
 		return true;
+	}	
 
-	if (constraints[emptySlotId].empty())  // There are no constraints for this parking space, any car can be moved here.
+	if (constraints[emptySlotId].empty()) {  // There are no constraints for this parking space, any car can be moved here.
 		return true;
+	}	
 
-	if (((*constraints)[emptySlotId]).find(carId) == ((*constraints)[emptySlotId].end()))
+	if (((*constraints)[emptySlotId]).find(carId) == ((*constraints)[emptySlotId].end())) {
 		return true;
+	}	
 
 	return false;
 }
 
 int RearrangeCars::numberOfCarsOnTheirDesiredPositions(const vector<int> &carPosition, const vector<int> &endStates) {
 	int count = 0;
-	for (int i = 0; i < carPosition.size(); i++)
-		if (endStates[carPosition[i]] == i)
+	for (int i = 0; i < carPosition.size(); i++) {
+		if (endStates[carPosition[i]] == i) {
 			count++;
+		}
+	}	
 
 	return count;
 }
@@ -115,9 +122,10 @@ bool RearrangeCars::generateSequenceOfMoves(const vector<int> &endStates, vector
 
 	while (true) {
 		currCarId = endStates[emptySlotId];
-		if (currCarId == EMPTY_SLOT_ID)  // We have reached slot which should be empty in the end.
+		if (currCarId == EMPTY_SLOT_ID) {  // We have reached slot which should be empty in the end.
 			currCarId = findMisplacedCar(carPosition, currentStates, endStates, constraints,
 				sequenceOfMoves, emptySlotId, numOfCarsOnDisiredPosition);
+		}		
 
 		currCarSlotId = carPosition[currCarId];
 		moveCar(currentStates, carPosition, currCarSlotId, emptySlotId);
@@ -125,22 +133,23 @@ bool RearrangeCars::generateSequenceOfMoves(const vector<int> &endStates, vector
 		sequenceOfMoves.push_back(Move(currCarId, make_pair(currCarSlotId, emptySlotId)));
 		emptySlotId = currCarSlotId;
 
-		if (numOfCarsOnDisiredPosition == carPosition.size())
+		if (numOfCarsOnDisiredPosition == carPosition.size()) {
 			break;
+		}	
 	}
       
 	return true;
 }
 
 void
-RearrangeCars::bruteForceAllSequence(vector<int> &currentStates, const vector<int> &endStates, vector<int> &carPosition,
+RearrangeCars::getAllSequencesFromCurrentPosition(vector<int> &currentStates, const vector<int> &endStates, vector<int> &carPosition,
 				      int emptySlotId, vector<Move> &sequenceOfMoves,
-			              vector<vector<Move>> &sequencesOfMoves, set<vector<int>> &usedPositions,
+			              vector<vector<Move>> &allSequencesOfMoves, set<vector<int>> &usedPositions,
 				      const vector<set<int>> *constraints) {
-	int numOfCarsOnDisiredPosition = numberOfCarsOnTheirDesiredPositions(carPosition, endStates);
+	int numOfCarsOnDesiredPositions = numberOfCarsOnTheirDesiredPositions(carPosition, endStates);
 
-	if (numOfCarsOnDisiredPosition == carPosition.size()) {
-		sequencesOfMoves.push_back(sequenceOfMoves);
+	if (numOfCarsOnDesiredPositions == carPosition.size()) {
+		allSequencesOfMoves.push_back(sequenceOfMoves);
 		return;
 	}
 
@@ -154,8 +163,8 @@ RearrangeCars::bruteForceAllSequence(vector<int> &currentStates, const vector<in
 				usedPositions.insert(carPosition);
 				sequenceOfMoves.push_back(
 					Move(currentStates[emptySlotId], make_pair(currCarSlotId, emptySlotId)));
-				bruteForceAllSequence(currentStates, endStates, carPosition, currCarSlotId,
-					sequenceOfMoves, sequencesOfMoves, usedPositions, constraints);
+				getAllSequencesFromCurrentPosition(currentStates, endStates, carPosition, currCarSlotId,
+					sequenceOfMoves, allSequencesOfMoves, usedPositions, constraints);
 				sequenceOfMoves.pop_back();
 				usedPositions.erase(usedPositions.find(carPosition));
 			}
@@ -166,8 +175,8 @@ RearrangeCars::bruteForceAllSequence(vector<int> &currentStates, const vector<in
 	}
 }
 
-bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endStates, vector<vector<Move>> &sequencesOfMoves, const vector<set<int>> *constraints) {
-	sequencesOfMoves.clear();
+bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endStates, vector<vector<Move>> &allSequencesOfMoves, const vector<set<int>> *constraints) {
+	allSequencesOfMoves.clear();
 	
 	if (!isInputValid(endStates, constraints)) {
 		return false;
@@ -180,9 +189,9 @@ bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endStates, ve
 	vector<Move> sequenceOfMoves;
 	set<vector<int>> usedPositions;
 	usedPositions.insert(carPosition);
-	bruteForceAllSequence(currentStates, endStates, carPosition, emptySlotId, sequenceOfMoves, sequencesOfMoves, usedPositions, constraints);
+	getAllSequencesFromCurrentPosition(currentStates, endStates, carPosition, emptySlotId, sequenceOfMoves, allSequencesOfMoves, usedPositions, constraints);
 	
-      return true;
+    return true;
 }
 
 bool RearrangeCars::isInputValid(const vector<int> &endStates, const vector<set<int>> *constraints) {
