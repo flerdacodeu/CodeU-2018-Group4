@@ -26,7 +26,7 @@ private:
 	void moveCar(vector<int> &currentStates, vector<int> &carPosition, int from, int to);
 	bool validMove(int carId, int emptySlot, const vector<set<int>> *constraints);
 	int numberOfCarsOnTheirDesiredPositions(const vector<int> &carPosition, const vector<int> &endPosition);
-	void bruteForceAllSequence(vector<int> &currentStates, const vector<int> &endStates, vector<int> &carPosition, int emptySlotId, vector<Move> &sequenceOfMoves, vector<vector<Move>> &sequencesOfMoves, set<vector<int>> &usedPositions, const vector<set<int>> *constraints = nullptr);
+	void getAllSequencesFromCurrentPosition(vector<int> &currentStates, const vector<int> &endStates, vector<int> &carPosition, int emptySlotId, vector<Move> &sequenceOfMoves, vector<vector<Move>> &allSequencesOfMovess, set<vector<int>> &usedPositions, const vector<set<int>> *constraints = nullptr);
 	bool isInputValid(const vector<int> &endStates, const vector<set<int>> *constraints);
 	bool isInputValidAux(const vector<int> &states, const vector<set<int>> *constraints);
 };
