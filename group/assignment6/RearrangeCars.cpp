@@ -85,7 +85,7 @@ int RearrangeCars::findMisplacedCar(vector<int> &carPositions, vector<int> &curr
 			}
 		}
 
-		// If misplaced car can't be moved to free slot, move a car that is on its position and can be moved here.
+		// If misplaced car can't be moved to free slot, move a car that is on it's position and can be moved here.
 		if (!foundMisplacedCar) {
 			for (int carId = 0; carId < carPositions.size(); carId++) {
 				if (validMove(carId, emptySlotId, constraints)) {
