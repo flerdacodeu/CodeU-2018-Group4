@@ -54,8 +54,8 @@ int RearrangeCars::numberOfCarsOnTheirDesiredPositions(const vector<int> &carPos
 }
 
 int RearrangeCars::findMisplacedCar(vector<int> &carPosition, vector<int> &currentStates, const vector<int> &endStates,
-						const vector<set<int>> *constraints, vector<Move> &sequenceOfMoves,
-						int &emptySlotId, int &numOfCarsOnDisiredPosition) {
+				    const vector<set<int>> *constraints, vector<Move> &sequenceOfMoves,
+				    int &emptySlotId, int &numOfCarsOnDisiredPosition) {
 	int lastMovedCarId = -1;
 	int currCarSlotId;
 
@@ -134,9 +134,9 @@ bool RearrangeCars::generateSequenceOfMoves(const vector<int> &endStates, vector
 
 void
 RearrangeCars::bruteForceAllSequence(vector<int> &currentStates, const vector<int> &endStates, vector<int> &carPosition,
-						 int emptySlotId, vector<Move> &sequenceOfMoves,
-						 vector<vector<Move>> &sequencesOfMoves, set<vector<int>> &usedPositions,
-						 const vector<set<int>> *constraints) {
+				     int emptySlotId, vector<Move> &sequenceOfMoves,
+			             vector<vector<Move>> &sequencesOfMoves, set<vector<int>> &usedPositions,
+				     const vector<set<int>> *constraints) {
 	int numOfCarsOnDisiredPosition = numberOfCarsOnTheirDesiredPositions(carPosition, endStates);
 
 	if (numOfCarsOnDisiredPosition == carPosition.size()) {
