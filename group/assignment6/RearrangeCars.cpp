@@ -133,7 +133,7 @@ bool RearrangeCars::generateSequenceOfMoves(const vector<int> &endSlot2CarId, ve
 		sequenceOfMoves.push_back(Move(currCarId, make_pair(currCarSlotId, emptySlotId)));
 		emptySlotId = currCarSlotId;
 
-		if (numOfCarsOnDisiredPosition == carPosition.size()) {
+		if (numOfCarsOnDesiredPositions == carPosition.size()) {
 			break;
 		}	
 	}
@@ -196,11 +196,12 @@ bool RearrangeCars::generateAllSequencesOfMoves(const vector<int> &endSlot2CarId
 
 bool RearrangeCars::isInputValid(const vector<int> &endSlot2CarId, const vector<set<int>> *constraints) {
 	bool atLeastOneCar = endSlot2CarId.size() >= 2 && this->startSlot2CarId.size() >= 2;
-	bool stateVectorsHaveSameSize = endSlot2CarId.size() == this->startSlot2CarId.size();
+	bool slot2CarIdVectorsHaveSameSize = endSlot2CarId.size() == this->startSlot2CarId.size();
+	bool constraintsSizeIsValid = constraints ? constraints->size() == this->startSlot2CarId.size() : true;  // Constraints should be either empty or have equal to number of slots size.
 	bool startSlot2CarIdValid = isInputValidAux(this->startSlot2CarId, constraints);
 	bool endSlot2CarIdValid = isInputValidAux(endSlot2CarId, constraints);
 
-	return atLeastOneCar && stateVectorsHaveSameSize && startSlot2CarIdValid && endSlot2CarIdValid;
+	return atLeastOneCar && slot2CarIdVectorsHaveSameSize && constraintsSizeIsValid && startSlot2CarIdValid && endSlot2CarIdValid;
 }
 
 bool RearrangeCars::isInputValidAux(const vector<int> &Slot2CarId, const vector<set<int>> *constraints) {
